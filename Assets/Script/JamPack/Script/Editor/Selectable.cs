@@ -66,46 +66,16 @@ namespace MPJamPack {
 
             serializedObject.ApplyModifiedProperties();
         }
-
-        // private void GenerateNavigation(Canvas canvas) {
-        //     Selectable[] selectables = FindObjectsOfType<Selectable>();
-
-        //     for (int i = 0; i < selectables.Length; i++) {
-        //         RectTransform rectT = selectables[i].GetComponent<RectTransform>();
-        //         float minX = rectT.position.x - rectT.sizeDelta.x / 2;
-        //         float maxX = rectT.position.x + rectT.sizeDelta.x / 2;
-        //         float minY = rectT.position.y - rectT.sizeDelta.y / 2;
-        //         float maxY = rectT.position.y + rectT.sizeDelta.y / 2;
-
-        //         float bestRightDis;
-        //         Selectable bestRight;
-        //         for (int j = 0; j < selectables.Length; j++)
-        //         {
-        //             if (selectables[j] == selectables[i]) continue;
-
-        //             RectTransform rectT2 = selectables[j].GetComponent<RectTransform>();
-        //             float minX2 = rectT2.position.x - rectT2.sizeDelta.x / 2;
-        //             float maxX2 = rectT2.position.x + rectT2.sizeDelta.x / 2;
-        //             float minY2 = rectT2.position.y - rectT2.sizeDelta.y / 2;
-        //             float maxY2 = rectT2.position.y + rectT2.sizeDelta.y / 2;
-
-        //             float rightDis = minX2 - maxX;
-        //             if (selectables[i].Type == SelectableType.Button && selectables[i].right == null) {
-        //                 if ()
-        //             }
-        //         }
-        //     }
-        // }
     }
 
 
     [CustomEditor(typeof(SelectableButton))]
     public class SelectableButtonEditor : SelectableEditor
     {
-        [MenuItem("GameObject/MPJamPack/Selectable Button", false, 0)]
+        [MenuItem("GameObject/MPJamPack/Button", false, 0)]
         static public void OnCreate()
         {
-            GameObject obj = new GameObject("Selectable Button", typeof(RectTransform));
+            GameObject obj = new GameObject("Button", typeof(RectTransform));
 
             if (Selection.activeGameObject)
             {
@@ -121,8 +91,62 @@ namespace MPJamPack {
             Selection.activeGameObject = obj;
         }
 
+        SerializedProperty submitEvent;
+
+        protected override void OnEnable() {
+            base.OnEnable();
+
+            submitEvent = serializedObject.FindProperty("submitEvent");
+        }
+
         public override void OnInspectorGUI() {
             base.OnInspectorGUI();
+
+            EditorGUILayout.PropertyField(submitEvent);
+
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    
+    [CustomEditor(typeof(SelectableSideSet))]
+    public class SelectableSideSetEditor : SelectableEditor {
+        [MenuItem("GameObject/MPJamPack/Side Set", false)]
+        static public void OnCreate()
+        {
+            GameObject obj = new GameObject("SideSet", typeof(RectTransform));
+
+            if (Selection.activeGameObject)
+                obj.GetComponent<RectTransform>().parent = Selection.activeGameObject.transform;
+            else
+                obj.GetComponent<RectTransform>().parent = FindObjectOfType<Canvas>().transform;
+
+            obj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+            obj.AddComponent<SelectableSideSet>();
+
+            Selection.activeGameObject = obj;
+        }
+
+        SerializedProperty submitEvent, leftEvent, rightEvent;
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+
+            submitEvent = serializedObject.FindProperty("submitEvent");
+            leftEvent = serializedObject.FindProperty("leftEvent");
+            rightEvent = serializedObject.FindProperty("rightEvent");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+
+            EditorGUILayout.PropertyField(submitEvent);
+            EditorGUILayout.PropertyField(leftEvent);
+            EditorGUILayout.PropertyField(rightEvent);
+
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }
