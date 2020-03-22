@@ -152,6 +152,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioManager: {fileID: 1231677255}
+  bgm1: {fileID: 8300000, guid: a851be48971ab48b5a8598c26bcc959f, type: 3}
+  bgm2: {fileID: 8300000, guid: b8b58f6a1cb10459ea284038ce55d4fd, type: 3}
 --- !u!114 &1231677255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,6 +167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   oneShotAudioSrc: {fileID: 0}
+  bgmAudioSrc: {fileID: 0}
+  secondaryBgmAudioSrc: {fileID: 0}
   defaultPreset: {fileID: 11400000, guid: ecfadd5ce9dd34dbc9d4e21c65de646f, type: 2}
 --- !u!4 &1231677256
 Transform:

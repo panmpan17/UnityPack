@@ -10,6 +10,8 @@ namespace MPJamPack {
         public AudioSource oneShotAudioSrc;
         private PrefabPool<AudioOneShotPlayer> oneShotPlayerPool;
 
+        public AudioSource bgmAudioSrc, secondaryBgmAudioSrc;
+
         [SerializeField]
         private AudioPreset defaultPreset;
 
@@ -27,6 +29,15 @@ namespace MPJamPack {
         private void Start() {
             if (oneShotAudioSrc == null) {
                 oneShotAudioSrc = gameObject.AddComponent<AudioSource>();
+            }
+
+            if (bgmAudioSrc == null) {
+                bgmAudioSrc = gameObject.AddComponent<AudioSource>();
+                bgmAudioSrc.loop = true;
+            }
+            if (secondaryBgmAudioSrc == null) {
+                secondaryBgmAudioSrc = gameObject.AddComponent<AudioSource>();
+                secondaryBgmAudioSrc.loop = true;
             }
         }
 
@@ -120,6 +131,87 @@ namespace MPJamPack {
             AudioOneShotPlayer player = oneShotPlayerPool.Get();
             player.transform.position = position;
             player.Play(clipDicts[ID], (_player) => oneShotPlayerPool.Put(_player), volumeMultiplier);
+        }
+
+        public void PlayOneShotAtPosition(int ID, Vector3 position, float volumeMultiplier=1) {
+            if (!clipDicts.ContainsKey(ID)) {
+            #if UNITY_EDITOR
+                Debug.LogWarningFormat("Audio '{0}' doesn't exist", ID);
+            #endif
+                return;
+            }
+
+            AudioOneShotPlayer player = oneShotPlayerPool.Get();
+            player.transform.position = position;
+            player.Play(clipDicts[ID], (_player) => oneShotPlayerPool.Put(_player), volumeMultiplier);
+        }
+
+        public void PlayOneShotAtPosition(AudioClip clip, Vector3 position, float volumeMultiplier=1) {
+            AudioOneShotPlayer player = oneShotPlayerPool.Get();
+            player.transform.position = position;
+            player.Play(clip, (_player) => oneShotPlayerPool.Put(_player), volumeMultiplier);
+        }
+    #endregion
+    
+    #region Background Music
+        public void PlayBgm(AudioClip bgmClip, bool overrideCurrentBGM=false) {
+            if (bgmAudioSrc.isPlaying) {
+                if (!overrideCurrentBGM) return;
+                bgmAudioSrc.Stop();
+                bgmAudioSrc.clip = null;
+            }
+            if (secondaryBgmAudioSrc.isPlaying) {
+                if (!overrideCurrentBGM) return;
+                secondaryBgmAudioSrc.Stop();
+                secondaryBgmAudioSrc.clip = null;
+            }
+
+            bgmAudioSrc.clip = bgmClip;
+            bgmAudioSrc.Play();
+        }
+
+        public void BlendNewBgm(AudioClip bgmClip, float fadeOut=0.5f, float fadeOutDelay=0,
+                                float fadeIn=0.5f, float fadeInDelay=0.25f) {
+            if (!bgmAudioSrc.isPlaying && !secondaryBgmAudioSrc.isPlaying) {
+                PlayBgm(bgmClip);
+                return;
+            }
+            // if (bgmAudioSrc.isPlaying && secondaryBgmAudioSrc.isPlaying)
+            // TODO: Handle if two bgm audio source both playing
+
+            if (bgmAudioSrc.isPlaying) {
+                secondaryBgmAudioSrc.clip = bgmClip;
+                StartCoroutine(FadeAudioSource(bgmAudioSrc, 0, fadeOut, fadeOutDelay, stopAfterFade: true));
+                secondaryBgmAudioSrc.volume = 0;
+                StartCoroutine(FadeAudioSource(secondaryBgmAudioSrc, bgmAudioSrc.volume, fadeIn, fadeInDelay, playerAfterDelay: true, returnVolume: false));
+            }
+            else {
+                bgmAudioSrc.clip = bgmClip;
+                StartCoroutine(FadeAudioSource(secondaryBgmAudioSrc, 0, fadeOut, fadeOutDelay, stopAfterFade: true));
+                bgmAudioSrc.volume = 0;
+                StartCoroutine(FadeAudioSource(bgmAudioSrc, secondaryBgmAudioSrc.volume, fadeIn, fadeInDelay, playerAfterDelay: true, returnVolume: false));
+            }
+        }
+    #endregion
+
+    #region Audio Source Fadeout Control
+        public IEnumerator FadeAudioSource(AudioSource src, float targetVolume, float fadeTime,
+                                    float delayTime=0, bool returnVolume=true, bool playerAfterDelay=false, bool stopAfterFade=false) {
+            if (delayTime > 0) yield return new WaitForSeconds(delayTime);
+            if (playerAfterDelay) src.Play();
+
+            float time = 0;
+            float originVolume = src.volume;
+
+            while (time < fadeTime) {
+                yield return null;
+                time += Time.deltaTime;
+                src.volume = Mathf.Lerp(originVolume, targetVolume, time / fadeTime);
+            }
+
+            if (stopAfterFade) src.Stop();
+            if (returnVolume) src.volume = originVolume;
+            else src.volume = targetVolume;
         }
     #endregion
     }
