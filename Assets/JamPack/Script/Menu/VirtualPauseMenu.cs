@@ -13,7 +13,7 @@ namespace MPJamPack {
         Cancel
     }
 
-    public class AbstractPauseMenu : MonoBehaviour
+    public class VirtualPauseMenu : MonoBehaviour
     {
         /// <summary>
         /// Current selected
