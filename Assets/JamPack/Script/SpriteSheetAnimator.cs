@@ -35,9 +35,7 @@ namespace MPJamPack {
             image = GetComponent<Image>();
 
             if (sameInterval) timer = new Timer(interval);
-            else {
-                timer = new Timer(keyPoints[0].Interval);
-            }
+            else timer = new Timer(keyPoints[0].Interval);
 
             switch (type) {
                 case AnimType.Loop:

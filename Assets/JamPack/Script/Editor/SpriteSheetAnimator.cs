@@ -21,6 +21,7 @@ namespace MPJamPack {
 
             keyPoints = new ReorderableList(serializedObject, serializedObject.FindProperty("keyPoints"),
                 true, true, true, true);
+            keyPoints.drawHeaderCallback = (rect) => EditorGUI.LabelField(rect, "Key Points");
             keyPoints.elementHeightCallback = (index) => sameInterval.boolValue? 20: 40;
             keyPoints.drawElementCallback = (rect, index, _a, _b) => {
                 rect.y += 1;

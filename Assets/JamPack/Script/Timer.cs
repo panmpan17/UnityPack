@@ -190,6 +190,12 @@ namespace MPJamPack {
             Timer = new Timer(time);
         }
 
+        public Vector3LerpTimer(float time) {
+            From = Vector3.zero;
+            To = Vector3.one;
+            Timer = new Timer(time);
+        }
+
         public Vector3 Value
         {
             get
@@ -214,6 +220,13 @@ namespace MPJamPack {
         {
             From = from;
             To = to;
+            Timer = new Timer(time);
+        }
+
+        public ColorLerpTimer(float time)
+        {
+            From = Color.black;
+            To = Color.white;
             Timer = new Timer(time);
         }
 

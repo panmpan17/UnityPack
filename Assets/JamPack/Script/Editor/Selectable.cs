@@ -10,16 +10,6 @@ namespace MPJamPack {
 
         bool editingNavigation = false;
 
-        GUIStyle buttonPressed;
-
-        private void SetupStyle() {
-            if (buttonPressed != null) return;
-
-            buttonPressed = new GUIStyle("Button");
-            buttonPressed.padding = new RectOffset(0, 0, 5, 5);
-            buttonPressed.margin = new RectOffset(0, 0, 0, 0);
-        }
-
         protected virtual void OnEnable() {
             targetGraphics = serializedObject.FindProperty("targetGraphics");
             style = serializedObject.FindProperty("style");
@@ -34,21 +24,19 @@ namespace MPJamPack {
         {
             serializedObject.Update();
 
-            SetupStyle();
-
             EditorGUILayout.PropertyField(targetGraphics, true);
             EditorGUILayout.PropertyField(style);
 
             GUILayout.Space(5);
 
             EditorGUI.BeginChangeCheck();
-            Selectable.ShowNavigationGizmos = GUILayout.Toggle(Selectable.ShowNavigationGizmos, new GUIContent("Show Navigation"), buttonPressed); ;
+            Selectable.ShowNavigationGizmos = EditorUtilities.ToggleButton(Selectable.ShowNavigationGizmos, new GUIContent("Show Navigation"));
             if (EditorGUI.EndChangeCheck()) {
                 EditorWindow.GetWindow<SceneView>().Repaint();
             }
 
             GUILayout.Space(5);
-            editingNavigation = GUILayout.Toggle(editingNavigation, new GUIContent("Edit Navigation"), buttonPressed);
+            editingNavigation = EditorUtilities.ToggleButton(editingNavigation, new GUIContent("Edit Navigation"));
             GUILayout.Space(5);
 
             if (editingNavigation) {
