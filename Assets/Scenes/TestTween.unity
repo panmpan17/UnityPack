@@ -353,6 +353,7 @@ GameObject:
   - component: {fileID: 1527872654}
   - component: {fileID: 1527872653}
   - component: {fileID: 1527872658}
+  - component: {fileID: 1527872659}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -551,7 +552,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1527872652}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 17fd9a257976c49c0a3675d921e6c733, type: 3}
   m_Name: 
@@ -618,6 +619,29 @@ MonoBehaviour:
       TargetTime: 4
       Running: 0
       ReverseMode: 0
+--- !u!114 &1527872659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527872652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42c691fb49bb747a3b34d9ca5f18bffb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  sameInterval: 1
+  interval: 0.5
+  keyPoints:
+  - Color: {r: 1, g: 1, b: 1, a: 1}
+    Interval: 0
+  - Color: {r: 1, g: 0, b: 0, a: 0.92941177}
+    Interval: 0
+  spriteRenderers: []
+  graphics:
+  - {fileID: 1527872653}
 --- !u!1 &1696592668
 GameObject:
   m_ObjectHideFlags: 0

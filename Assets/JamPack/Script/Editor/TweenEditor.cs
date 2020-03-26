@@ -51,9 +51,7 @@ namespace MPJamPack {
             EditorGUILayout.PropertyField(sameInterval);
 
             if (sameInterval.boolValue)
-            {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("interval"));
-            }
 
             GUILayout.Space(5);
 
@@ -85,6 +83,60 @@ namespace MPJamPack {
                     else property.vector3Value = newPos;
                 }
             }
+
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    [CustomEditor(typeof(ColorTween))]
+    public class ColorEditor : Editor
+    {
+        ColorTween tween;
+
+        SerializedProperty sameInterval;
+
+        ReorderableList keyPoints;
+
+        private void OnEnable() {
+            tween = (ColorTween) target;
+
+            sameInterval = serializedObject.FindProperty("sameInterval");
+
+            keyPoints = new ReorderableList(serializedObject, serializedObject.FindProperty("keyPoints"),
+                true, true, true, true);
+            keyPoints.drawHeaderCallback = (rect) => EditorGUI.LabelField(rect, "Key Points");
+            keyPoints.elementHeightCallback = (index) => sameInterval.boolValue ? 20 : 40;
+            keyPoints.drawElementCallback = (rect, index, _a, _b) =>
+            {
+                rect.y += 1;
+                rect.height = 18;
+
+                SerializedProperty property = keyPoints.serializedProperty.GetArrayElementAtIndex(index);
+                EditorGUI.PropertyField(rect, property.FindPropertyRelative("Color"), GUIContent.none);
+
+                if (!sameInterval.boolValue)
+                {
+                    rect.y += 20;
+                    rect.height = 18;
+                    EditorGUI.PropertyField(rect, property.FindPropertyRelative("Interval"));
+                }
+            };
+        }
+
+        public override void OnInspectorGUI() {
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("type"));
+            // EditorGUILayout.PropertyField(uselocalPosition);
+            EditorGUILayout.PropertyField(sameInterval);
+
+            if (sameInterval.boolValue)
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("interval"));
+
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("spriteRenderers"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("graphics"));
+
+            keyPoints.DoLayoutList();
 
             serializedObject.ApplyModifiedProperties();
         }
