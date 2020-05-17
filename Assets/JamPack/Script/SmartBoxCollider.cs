@@ -15,9 +15,14 @@ namespace MPJamPack {
 
         private ContactPoints[] leftContactPoints, rightContactPoints, upContactPoints, downContactPoints;
 
-        private new BoxCollider2D collider;
+        private bool upTouched, downTouched, leftTouched, rightTouched;
+        public bool UpTouched { get { return upTouched; } }
+        public bool DownTouched { get { return downTouched; } }
+        public bool LeftTouched { get { return leftTouched; } }
+        public bool RightTouched { get { return rightTouched; } }
 
-        private bool IsGrounded = false;
+        private new BoxCollider2D collider;
+        public BoxCollider2D Collider { get { return collider; } }
 
         private void CalculateContactPoints() {
             upContactPoints = new ContactPoints[horizontalDetectPointCount];
@@ -61,18 +66,75 @@ namespace MPJamPack {
             CalculateContactPoints();
         }
 
-        private void FixedUpdate() {
-            for (int i = 0; i < downContactPoints.Length; i++) {
-                downContactPoints[i].Raycast(transform.position, groundLayer);
-            #if UNITY_EDITOR && DRAW_RAY_CAST
+        private void RaycastContactPoint() {
+            downTouched = false;
+            rightTouched = false;
+            leftTouched = false;
+            upTouched = false;
+
+            for (int i = 0; i < upContactPoints.Length; i++)
+            {
+                RaycastHit2D hit = upContactPoints[i].Raycast(transform.position, groundLayer);
+                if (hit.collider != null) upTouched = true;
+
+#if UNITY_EDITOR && DRAW_RAY_CAST
+                Debug.DrawRay(
+                    transform.position + (Vector3)upContactPoints[i].Position,
+                    upContactPoints[i].Dis,
+                    hit.collider != null ? Color.red : Color.green,
+                    0.05f
+                );
+#endif
+            }
+
+            for (int i = 0; i < downContactPoints.Length; i++)
+            {
+                RaycastHit2D hit = downContactPoints[i].Raycast(transform.position, groundLayer);
+                if (hit.collider != null) downTouched = true;
+
+#if UNITY_EDITOR && DRAW_RAY_CAST
                 Debug.DrawRay(
                     transform.position + (Vector3)downContactPoints[i].Position,
                     downContactPoints[i].Dis,
-                    downContactPoints[i].LastCastHit? Color.red: Color.green,
+                    hit.collider != null ? Color.red : Color.green,
                     0.05f
                 );
-            #endif
+#endif
             }
+
+            for (int i = 0; i < rightContactPoints.Length; i++)
+            {
+                RaycastHit2D hit = rightContactPoints[i].Raycast(transform.position, groundLayer);
+                if (hit.collider != null) rightTouched = true;
+
+#if UNITY_EDITOR && DRAW_RAY_CAST
+                Debug.DrawRay(
+                    transform.position + (Vector3)rightContactPoints[i].Position,
+                    rightContactPoints[i].Dis,
+                    hit.collider != null ? Color.red : Color.green,
+                    0.05f
+                );
+#endif
+            }
+
+            for (int i = 0; i < leftContactPoints.Length; i++)
+            {
+                RaycastHit2D hit = leftContactPoints[i].Raycast(transform.position, groundLayer);
+                if (hit.collider != null) leftTouched = true;
+
+#if UNITY_EDITOR && DRAW_RAY_CAST
+                Debug.DrawRay(
+                    transform.position + (Vector3)leftContactPoints[i].Position,
+                    leftContactPoints[i].Dis,
+                    hit.collider != null ? Color.red : Color.green,
+                    0.05f
+                );
+#endif
+            }
+        }
+
+        private void FixedUpdate() {
+            RaycastContactPoint();
         }
 
         private struct ContactPoints {
