@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿#pragma warning disable 0649
+
+using UnityEngine;
 
 
-namespace MPJamPack {
+namespace MPack {
     public enum TweenType { Loop, PingPong, BackwardLoop, ForwardOnce, BackwardOnce }
 
     public class PositionTween : MonoBehaviour

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-namespace MPJamPack {
-	[CreateAssetMenu(menuName="MPJamPack/Selectable Style")]
+namespace MPack {
+	[CreateAssetMenu(menuName="MPack/Selectable Style")]
 	public class SelectableStyle : ScriptableObject {
 		public Color NormalColor;
 		public Color ActiveColor;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace MPJamPack {
+namespace MPack {
     public class LanguageEditWindow : EditorWindow
     {
         private const string Alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -106,7 +106,10 @@ namespace MPJamPack {
                 labelRect.width = 200;
 
                 if (textIndex[i] != -1) {
+                    EditorGUI.BeginChangeCheck();
                     allDatas[i].Texts[textIndex[i]].Text = EditorGUI.TextArea(labelRect, allDatas[i].Texts[textIndex[i]].Text);
+                    if (EditorGUI.EndChangeCheck())
+                        EditorUtility.SetDirty(allDatas[i]);
                 }
             }
             // EditorGUI.LabelField.

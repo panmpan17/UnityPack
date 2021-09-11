@@ -7,8 +7,8 @@ using UnityEditor;
 using UnityEditorInternal;
 #endif
 
-namespace MPJamPack {
-    [CreateAssetMenu(menuName="MPJamPack/Language Data")]
+namespace MPack {
+    [CreateAssetMenu(menuName="MPack/Language Data")]
     public class LanguageData : ScriptableObject {
         public int ID;
         public IDTextPair[] Texts;

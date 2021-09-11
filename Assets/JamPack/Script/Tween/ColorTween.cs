@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿#pragma warning disable 0649
+
+using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace MPJamPack {
+namespace MPack {
     public class ColorTween : MonoBehaviour
     {
         [SerializeField]

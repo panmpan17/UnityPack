@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEditorInternal;
 
 
-namespace MPJamPack {
+namespace MPack {
     [CustomEditor(typeof(PositionTween))]
     public class PositionEditor : Editor
     {

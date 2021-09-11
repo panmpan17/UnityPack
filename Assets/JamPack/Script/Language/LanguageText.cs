@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MPJamPack {
+namespace MPack {
     public class LanguageText : MonoBehaviour
     {
 		[SerializeField]
@@ -54,7 +54,7 @@ namespace MPJamPack {
 			if (id != _id || forceRefresh) {
 				id = _id;
 
-				// if (LanguageMgr.DataLoaded) Text = LanguageMgr.GetTextById(PlayerPreference.Language, Id);
+				if (LanguageMgr.DataLoaded) Text = LanguageMgr.GetTextById(id);
 			}
 		}
 
@@ -79,22 +79,28 @@ namespace MPJamPack {
 			#if UNTIY_EDITOR
 			if (uiText != null)
 				Debug.LogError("Avoid using UI Text, use TextMeshProUGUI instead", gameObject);
-			#endif			
-
-            LanguageMgr.AddText(this);
+			#endif
 		}
 
-        private void Awake() {
+        private void Awake()
+		{
 			if (!initialed) InitialGetTextComponent();
 		}
 
-		// private void Start() {
-        //     if (LanguageMgr.DataLoaded) Text = LanguageMgr.GetTextById(PlayerPreference.Language, Id);
-		// }
+        private void Start()
+        {
+            if (LanguageMgr.DataLoaded) Text = LanguageMgr.GetTextById(id);
+        }
 
-		// public void Reload() {
-        //     if (LanguageMgr.DataLoaded) Text = LanguageMgr.GetTextById(PlayerPreference.Language, Id);
-		// }
+		private void OnEnable()
+		{
+            if (LanguageMgr.DataLoaded) Text = LanguageMgr.GetTextById(id);
+		}
+
+		public void Reload()
+		{
+            if (LanguageMgr.DataLoaded) Text = LanguageMgr.GetTextById(id);
+		}
 
 		/// <summary>
 		/// Add text processor, called before value actually get set

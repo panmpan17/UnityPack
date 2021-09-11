@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿#pragma warning disable 0649
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace MPJamPack
+namespace MPack
 {
     public class SelectableSideSet : Selectable
     {

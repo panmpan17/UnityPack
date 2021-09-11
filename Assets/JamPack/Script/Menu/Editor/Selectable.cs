@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MPJamPack {
+namespace MPack {
     [CustomEditor(typeof(Selectable))]
     public class SelectableEditor : Editor {
         SerializedProperty targetGraphics, style;
@@ -60,7 +60,7 @@ namespace MPJamPack {
     [CustomEditor(typeof(SelectableButton))]
     public class SelectableButtonEditor : SelectableEditor
     {
-        [MenuItem("GameObject/MPJamPack/Button", false, 0)]
+        [MenuItem("GameObject/MPack/Button", false, 0)]
         static public void OnCreate()
         {
             GameObject obj = new GameObject("Button", typeof(RectTransform));
@@ -99,7 +99,7 @@ namespace MPJamPack {
     
     [CustomEditor(typeof(SelectableSideSet))]
     public class SelectableSideSetEditor : SelectableEditor {
-        [MenuItem("GameObject/MPJamPack/Side Set", false)]
+        [MenuItem("GameObject/MPack/Side Set", false)]
         static public void OnCreate()
         {
             GameObject obj = new GameObject("SideSet", typeof(RectTransform));

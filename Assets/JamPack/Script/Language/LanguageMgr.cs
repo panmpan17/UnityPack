@@ -1,38 +1,28 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace MPJamPack {
+namespace MPack {
     public static class LanguageMgr
     {
         static private LanguageData languageData;
-		static private List<LanguageText> texts = new List<LanguageText>();
+		// static private List<LanguageText> texts = new List<LanguageText>();
 
-        /// <summary>
-        /// Register the LanguageText to Manager
-        /// </summary>
-        /// <param name="text"></param>
-		static public void AddText(LanguageText text) {
-			texts.Add(text);
-		}
+        static public bool DataLoaded {
+            get {
+                return languageData != null;
+            }
+        }
 
-        /// <summary>
-        /// Clear all the registered LanguageText component, usally used in changing scene
-        /// </summary>
-		static public void ClearTexts() {
-			texts.Clear();
-		}
+		static public void AssignLanguageData(LanguageData newData, bool forceReload=false) {
+            if (languageData == newData && !forceReload)
+                return;
 
-		static public void AssignLanguageData(LanguageData newData) {
             languageData = newData;
 
-            for (int i = 0; i < texts.Count; i++)
+            LanguageText[] texts = GameObject.FindObjectsOfType<LanguageText>();
+
+            for (int i = 0; i < texts.Length; i++)
             {
-                if (texts[i] == null)
-                {
-                    texts.RemoveAt(i);
-                    i--;
-                    continue;
-                }
                 texts[i].Text = GetTextById(texts[i].ID);
             }
 		}

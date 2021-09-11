@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-namespace MPJamPack {
+namespace MPack {
     public enum SelectableType { Button, SideSet }
 
     public abstract class Selectable : MonoBehaviour
