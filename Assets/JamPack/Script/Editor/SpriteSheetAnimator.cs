@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 
-namespace MPJamPack {
+namespace MPack {
     [CustomEditor(typeof(SpriteSheetAnimator))]
     public class _Editor : Editor
     {

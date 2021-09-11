@@ -1,8 +1,13 @@
-﻿using System.Collections;
+﻿// #define HAS_2D_TILEMAP_EXTRA
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEditor;
 
+
+#if HAS_2D_TILEMAP_EXTRA
 public class TileSetMaker : MonoBehaviour
 {
     private static Vector3Int TOPLEFT = new Vector3Int(-1, 1, 0);
@@ -17,13 +22,13 @@ public class TileSetMaker : MonoBehaviour
     private static Vector3Int DOWN = new Vector3Int(0, -1, 0);
     private static Vector3Int DOWNRIGHT = new Vector3Int(1, -1, 0);
 
-    [MenuItem("MPJamPack/Improt Blob Tile", true)]
+    [MenuItem("MPack/Import Blob Tile", true)]
     static private bool ValidateAnalyzeSprites()
     {
         return Selection.objects.Length == 1;
     }
 
-    [MenuItem("MPJamPack/Improt Blob Tile")]
+    [MenuItem("MPack/Import Blob Tile")]
     static private void AnalyzeSprites() {
         if (Selection.objects.Length != 1)
             return;
@@ -540,7 +545,7 @@ public class TileSetMaker : MonoBehaviour
         return rule;
     }
 
-    [MenuItem("MPJamPack/Improt Wang Tile")]
+    [MenuItem("MPack/Import Wang Tile")]
     static private void ImportWangTile()
     {
         if (Selection.objects.Length != 1)
@@ -713,4 +718,38 @@ public class TileSetMaker : MonoBehaviour
         rule.ApplyNeighbors(tileRule);
         return rule;
     }
+
+    [MenuItem("MPack/Change Collider To Grid", true)]
+    static private bool ValideChangeRuletileCollider()
+    {
+        if (Selection.objects.Length != 1)
+            return false;
+
+        Object file = Selection.objects[0];
+        // Texture2D texture = (Texture2D) file;
+        string path = AssetDatabase.GetAssetPath(file);
+        RuleTile ruleTile = AssetDatabase.LoadAssetAtPath<RuleTile>(path);
+        return ruleTile != null;
+    }
+
+    [MenuItem("MPack/Change Collider To Grid")]
+    static private void ChangeRuletileCollider()
+    {
+        if (Selection.objects.Length != 1)
+            return;
+
+        Object file = Selection.objects[0];
+        // Texture2D texture = (Texture2D) file;
+        string path = AssetDatabase.GetAssetPath(file);
+        RuleTile ruleTile = AssetDatabase.LoadAssetAtPath<RuleTile>(path);
+
+        for (int i = 0; i < ruleTile.m_TilingRules.Count; i++)
+        {
+            ruleTile.m_TilingRules[i].m_ColliderType = Tile.ColliderType.Grid;
+        }
+
+        // AssetDatabase.dir
+        AssetDatabase.SaveAssets();
+    }
 }
+#endif

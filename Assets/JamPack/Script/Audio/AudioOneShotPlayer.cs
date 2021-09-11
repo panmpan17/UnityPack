@@ -2,12 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MPJamPack {
+namespace MPack {
     public class AudioOneShotPlayer : MonoBehaviour, IPoolableObj
     {
         AudioSource audioSource;
 
+        private float volume = 1, volumeMultiplier = 1;
+        public float Volume {
+            set {
+                volume = value;
+                if (audioSource != null) audioSource.volume = value * volumeMultiplier;
+            }
+        }
+
         public System.Action<AudioOneShotPlayer> PlayEndCall;
+        private OneShotLoopPlayer loopPlayer;
 
         public void Instantiate() {
             audioSource = GetComponent<AudioSource>();
@@ -16,6 +25,7 @@ namespace MPJamPack {
             }
 
             audioSource.spatialBlend = 1;
+            gameObject.SetActive(true);
         }
         public void DeactivateObj(Transform collectionTransform) {
             if (collectionTransform != null) transform.SetParent(collectionTransform);
@@ -27,18 +37,30 @@ namespace MPJamPack {
             enabled = true;
         }
 
-        public void Play(AudioClip clip, System.Action<AudioOneShotPlayer> playEndCall=null, float volumeMultiplier=1) {
+        public void Play(AudioClip clip, System.Action<AudioOneShotPlayer> playEndCall=null, float _volumeMultiplier=1) {
             audioSource.clip = clip;
-            audioSource.volume = volumeMultiplier;
+            audioSource.volume = volume * _volumeMultiplier;
+            volumeMultiplier = _volumeMultiplier;
             audioSource.Play();
             audioSource.loop = false;
 
             PlayEndCall = playEndCall;
         }
 
+        public void RegisterForceStop(OneShotLoopPlayer _loopPlayer) {
+            loopPlayer = _loopPlayer;
+            loopPlayer.ForceStopDelegate += Stop;
+        }
+
+        public void Stop() {
+            audioSource.Stop();
+        }
+
         private void Update() {
             if (!audioSource.isPlaying) {
                 if (PlayEndCall != null) PlayEndCall(this);
+                if (loopPlayer != null)
+                    loopPlayer.ForceStopDelegate -= Stop;
                 enabled = false;
             }
         }

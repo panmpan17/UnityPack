@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MPJamPack {
+namespace MPack {
     public class EditorUtilities : MonoBehaviour
     {
         private static GUIStyle buttonPressedStyle;

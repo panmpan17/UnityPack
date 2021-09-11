@@ -3,14 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using UnityEngine;
 using UnityEditor;
 
-namespace MPJamPack {
+namespace MPack {
     public class AudioIDEnumWindow : EditorWindow {
         private const string TypeCSFilePath = "JamPack/Script/Audio/AudioIDEnum.cs";
 
-        private const string FileHead = "namespace MPJamPack {\n\tpublic enum AudioIDEnum {\n";
+        private const string FileHead = "namespace MPack {\n\tpublic enum AudioIDEnum {\n";
         private const string FileFoot = "\t}\n}";
 
         [MenuItem("Window/Audio ID Enum")]

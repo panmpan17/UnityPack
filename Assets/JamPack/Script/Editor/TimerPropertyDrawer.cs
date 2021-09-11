@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace MPJamPack {
+namespace MPack {
     [CustomPropertyDrawer(typeof(Timer))]
     public class TimerPropertyDrawer : PropertyDrawer
     {
