@@ -16,5 +16,22 @@ namespace MPack {
 
             return GUILayout.Toggle(toggled, btnContent, buttonPressedStyle);
         }
+
+        /// <summary>
+        /// Tanslate 0..255 to 0..1
+        /// </summary>
+        /// <param name="r">Red [0..255]</param>
+        /// <param name="g">Green [0..255]</param>
+        /// <param name="b">Blue [0..255]</param>
+        /// <param name="a">Alpha [0..255]</param>
+        /// <returns></returns>
+        public static Color From256Color(float r, float g, float b, float a=255) {
+            return new Color(
+                r / 255 > 255 ? 1: r / 255,
+                g / 255 > 255 ? 1: g / 255,
+                b / 255 > 255 ? 1: b / 255,
+                a / 255 > 255 ? 1 : a / 255
+            );
+        }
     }
 }

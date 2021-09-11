@@ -47,22 +47,36 @@ namespace MPack {
             }
         }
 
-        public void ClearAliveObjs()
+        public void ClearAliveObjects()
         {
-            while (AliveObjs.Count > 0)
+            for (int i = 0; i < AliveObjs.Count; i++)
             {
-                GameObject.Destroy(AliveObjs[0]);
-                AliveObjs.RemoveAt(0);
+                GameObject.Destroy(AliveObjs[i]);
             }
+            AliveObjs.Clear();
         }
 
-        public void ClearPoolObjs()
+        public void ClearPoolObjects()
         {
-            while (PoolObjs.Count > 0)
+            for (int i = 0; i < PoolObjs.Count; i++)
             {
-                GameObject.Destroy(PoolObjs[0]);
-                PoolObjs.RemoveAt(0);
+                GameObject.Destroy(PoolObjs[i]);
             }
+            PoolObjs.Clear();
+        }
+
+        public void ClearObjects()
+        {
+            for (int i = 0; i < AliveObjs.Count; i++)
+            {
+                GameObject.Destroy(AliveObjs[i]);
+            }
+            for (int i = 0; i < PoolObjs.Count; i++)
+            {
+                GameObject.Destroy(PoolObjs[i]);
+            }
+            AliveObjs.Clear();
+            PoolObjs.Clear();
         }
 
         public T Get()
@@ -193,7 +207,9 @@ namespace MPack {
         {
             if (count == 1)
                 return Get();
-            
+            else if (count <= 0)
+                throw new System.ArgumentException("Count is zero");
+
             GameObject parent = Get();
             Transform child = GetRecursivly(count - 1, localPosOffset).transform;
             child.SetParent(parent.transform);
@@ -209,7 +225,7 @@ namespace MPack {
             AliveObjs.Remove(obj);
             PoolObjs.Add(obj);
             obj.SetActive(false);
-            if (PoolCollection != null) obj.transform.SetParent(PoolCollection);
+            obj.transform.SetParent(PoolCollection);
         }
 
         public void PutRecursivly(Transform objT)
