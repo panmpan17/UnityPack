@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
-using MPJamPack;
+using MPack;
 
 
 [RequireComponent(typeof(TextMeshPro))]
