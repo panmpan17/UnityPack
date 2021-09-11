@@ -1,7 +1,9 @@
-﻿#define DRAW_RAY_CAST
+﻿#pragma warning disable 0649
+
+#define DRAW_RAY_CAST
 using UnityEngine;
 
-namespace MPJamPack {
+namespace MPack {
     [RequireComponent(typeof(BoxCollider2D))]
     public class SmartBoxCollider : MonoBehaviour
     {

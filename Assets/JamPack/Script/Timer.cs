@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MPJamPack {
+namespace MPack {
     [System.Serializable]
     public struct Timer
     {
@@ -23,10 +23,10 @@ namespace MPJamPack {
         /// <summary>
         /// Reset timer run timer to 0
         /// </summary>
-        public void Reset()
+        public void Reset(bool running=true)
         {
             RunTime = 0;
-            Running = true;
+            Running = running;
         }
 
         /// <summary>
@@ -84,6 +84,32 @@ namespace MPJamPack {
                     return RunTime >= TargetTime;
                 }
             }
+        }
+
+        public bool Update()
+        {
+            // get {
+                if (ReverseMode) 
+                {
+                    if (RunTime <= 0)
+                        return false;
+                    else
+                    {
+                        RunTime -= Time.deltaTime;
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (RunTime >= TargetTime)
+                        return false;
+                    else
+                    {
+                        RunTime += Time.deltaTime;
+                        return true;
+                    }
+                }
+            // }
         }
 
         /// <summary>
