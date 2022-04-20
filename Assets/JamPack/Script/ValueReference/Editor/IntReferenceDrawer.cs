@@ -6,12 +6,12 @@ namespace MPack
     [CustomPropertyDrawer(typeof(IntReference))]
     public class IntReferenceDraer : RereferenceDrawer
     {
-        SerializedProperty valueProperty;
+        SerializedProperty constantProperty;
 
         protected override void OnEnable(SerializedProperty property)
         {
             base.OnEnable(property);
-            valueProperty = property.FindPropertyRelative("Value");
+            constantProperty = property.FindPropertyRelative("Constant");
         }
 
         protected override void DrawValue(Rect rest)
@@ -22,7 +22,7 @@ namespace MPack
             }
             else
             {
-                DrawValueProperty(rest, valueProperty);
+                DrawValueProperty(rest, constantProperty);
             }
         }
 
@@ -52,7 +52,19 @@ namespace MPack
             EditorGUI.PropertyField(rest, value, GUIContent.none);
         }
 
+
         protected override void CreateAsset()
-        { }
+        {
+            string path = EditorUtility.SaveFilePanelInProject("New Int Varible", "New Int.asset", "asset", "Test");
+
+            if (path != "")
+            {
+                var newVarible = ScriptableObject.CreateInstance<IntVariable>();
+                AssetDatabase.CreateAsset(newVarible, path);
+                AssetDatabase.SaveAssets();
+                variableProperty.objectReferenceValue = newVarible;
+                variableProperty.serializedObject.ApplyModifiedProperties();
+            }
+        }
     }
 }

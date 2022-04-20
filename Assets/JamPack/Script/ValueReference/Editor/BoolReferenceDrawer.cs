@@ -6,12 +6,12 @@ namespace MPack
     [CustomPropertyDrawer(typeof(BoolReference))]
     public class BoolReferenceDraer : RereferenceDrawer
     {
-        SerializedProperty valueProperty;
+        SerializedProperty constantProperty;
 
         protected override void OnEnable(SerializedProperty property)
         {
             base.OnEnable(property);
-            valueProperty = property.FindPropertyRelative("Value");
+            constantProperty = property.FindPropertyRelative("Constant");
         }
 
         protected override void DrawValue(Rect rest)
@@ -22,7 +22,7 @@ namespace MPack
             }
             else
             {
-                DrawValueProperty(rest, valueProperty);
+                DrawValueProperty(rest, constantProperty);
             }
         }
 
@@ -53,6 +53,17 @@ namespace MPack
         }
 
         protected override void CreateAsset()
-        { }
+        {
+            string path = EditorUtility.SaveFilePanelInProject("New Bool Varible", "New Bool.asset", "asset", "Test");
+
+            if (path != "")
+            {
+                var newVarible = ScriptableObject.CreateInstance<BoolVariable>();
+                AssetDatabase.CreateAsset(newVarible, path);
+                AssetDatabase.SaveAssets();
+                variableProperty.objectReferenceValue = newVarible;
+                variableProperty.serializedObject.ApplyModifiedProperties();
+            }
+        }
     }
 }

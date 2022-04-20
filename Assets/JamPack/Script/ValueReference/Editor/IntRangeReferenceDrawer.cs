@@ -6,14 +6,14 @@ namespace MPack
     [CustomPropertyDrawer(typeof(IntRangeReference))]
     public class IntRangeReferenceDrawer : RereferenceDrawer
     {
-        SerializedProperty minProperty;
-        SerializedProperty maxProperty;
+        SerializedProperty constantMinProperty;
+        SerializedProperty constantMaxProperty;
 
         protected override void OnEnable(SerializedProperty property)
         {
             base.OnEnable(property);
-            minProperty = property.FindPropertyRelative("Min");
-            maxProperty = property.FindPropertyRelative("Max");
+            constantMinProperty = property.FindPropertyRelative("ConstantMin");
+            constantMaxProperty = property.FindPropertyRelative("ConstantMax");
         }
 
         protected override void DrawValue(Rect rest)
@@ -24,7 +24,7 @@ namespace MPack
             }
             else
             {
-                DrawMinMax(rest, minProperty, maxProperty);
+                DrawMinMax(rest, constantMinProperty, constantMaxProperty);
             }
         }
 
@@ -63,6 +63,17 @@ namespace MPack
         }
 
         protected override void CreateAsset()
-        { }
+        {
+            string path = EditorUtility.SaveFilePanelInProject("New Int Range Varible", "New Int Range.asset", "asset", "Test");
+
+            if (path != "")
+            {
+                var newVarible = ScriptableObject.CreateInstance<IntRangeVariable>();
+                AssetDatabase.CreateAsset(newVarible, path);
+                AssetDatabase.SaveAssets();
+                variableProperty.objectReferenceValue = newVarible;
+                variableProperty.serializedObject.ApplyModifiedProperties();
+            }
+        }
     }
 }

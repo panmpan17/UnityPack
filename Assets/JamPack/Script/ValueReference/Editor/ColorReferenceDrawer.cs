@@ -6,12 +6,12 @@ namespace MPack
     [CustomPropertyDrawer(typeof(ColorReference))]
     public class ColorReferenceDraer : RereferenceDrawer
     {
-        SerializedProperty valueProperty;
+        SerializedProperty constantroperty;
 
         protected override void OnEnable(SerializedProperty property)
         {
             base.OnEnable(property);
-            valueProperty = property.FindPropertyRelative("Value");
+            constantroperty = property.FindPropertyRelative("Constant");
         }
 
         protected override void DrawValue(Rect rest)
@@ -22,7 +22,7 @@ namespace MPack
             }
             else
             {
-                DrawValueProperty(rest, valueProperty);
+                DrawValueProperty(rest, constantroperty);
             }
         }
 
@@ -53,6 +53,17 @@ namespace MPack
         }
 
         protected override void CreateAsset()
-        { }
+        {
+            string path = EditorUtility.SaveFilePanelInProject("New Color Varible", "New Color.asset", "asset", "Test");
+
+            if (path != "")
+            {
+                var newVarible = ScriptableObject.CreateInstance<ColorVariable>();
+                AssetDatabase.CreateAsset(newVarible, path);
+                AssetDatabase.SaveAssets();
+                variableProperty.objectReferenceValue = newVarible;
+                variableProperty.serializedObject.ApplyModifiedProperties();
+            }
+        }
     }
 }
