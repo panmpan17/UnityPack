@@ -51,7 +51,7 @@ TextureImporter:
       213: -8299687783037956010
     second: wang-tiles-export_15
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -71,6 +71,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -80,8 +82,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -102,9 +104,13 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -491,6 +497,23 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      wang-tiles-export_11: 8763995853657987357
+      wang-tiles-export_14: 3737581280042991747
+      wang-tiles-export_5: -2674433947159171286
+      wang-tiles-export_13: 6130124855548247467
+      wang-tiles-export_4: 6155103111560503843
+      wang-tiles-export_2: 5104272970287180014
+      wang-tiles-export_12: -435834438789993766
+      wang-tiles-export_1: -1310229511495766030
+      wang-tiles-export_3: 4398696789655757605
+      wang-tiles-export_15: -8299687783037956010
+      wang-tiles-export_0: 7720391737926663649
+      wang-tiles-export_10: -3412375762993696085
+      wang-tiles-export_8: 365500076300722415
+      wang-tiles-export_6: 2359976565224223589
+      wang-tiles-export_7: 7481178570694104633
+      wang-tiles-export_9: 7901617907503168101
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
