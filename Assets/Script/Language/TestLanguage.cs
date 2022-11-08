@@ -9,6 +9,10 @@ public class TestLanguage : MonoBehaviour
     LanguageData languagePack, secondLanguagePack;
     private bool main = true;
 
+    [SerializeField]
+    [LauguageID]
+    private int test;
+
     private void Start() {
         LanguageMgr.AssignLanguageData(languagePack);
     }
