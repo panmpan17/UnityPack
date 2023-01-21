@@ -2,24 +2,32 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName="MPack/Event Reference", order=0)]
-public class EventReference : ScriptableObject
+namespace MPack
 {
-    [System.NonSerialized]
-    private List<EventDispatcher> eventDispatchers = new List<EventDispatcher>();
-
-    public void Invoke()
+    public class AbstractEventRefernece : ScriptableObject
     {
-        for (int i = eventDispatchers.Count - 1; i >= 0; i--)
-            eventDispatchers[i].DispatchEvent();
+        [System.NonSerialized]
+        protected List<EventDispatcher> eventDispatchers = new List<EventDispatcher>();
+
+
+        public void RegisterEvent(EventDispatcher dispatcher) => eventDispatchers.Add(dispatcher);
+        public void UnregisterEvent(EventDispatcher dispatcher) => eventDispatchers.Remove(dispatcher);
     }
 
-    public void RegisterEvent(EventDispatcher dispatcher)
+    [CreateAssetMenu(menuName="MPack/Event", order=0)]
+    public class EventReference : AbstractEventRefernece
     {
-        eventDispatchers.Add(dispatcher);
-    }
-    public void UnregisterEvent(EventDispatcher dispatcher)
-    {
-        eventDispatchers.Remove(dispatcher);
+        private event System.Action triggerEvent;
+
+        public void Invoke()
+        {
+            for (int i = eventDispatchers.Count - 1; i >= 0; i--)
+                eventDispatchers[i].DispatchEvent();
+
+            triggerEvent?.Invoke();
+        }
+
+        public void RegisterEvent(System.Action callback) => triggerEvent += callback;
+        public void UnregisterEvent(System.Action callback) => triggerEvent -= callback;
     }
 }
