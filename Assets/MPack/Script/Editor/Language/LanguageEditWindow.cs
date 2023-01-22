@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace MPack {
+namespace MPack
+{
     public class LanguageEditWindow : EditorWindow
     {
         private const string Alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -20,7 +21,8 @@ namespace MPack {
 
         [MenuItem("Window/Language Editor")]
         [MenuItem("MPack/Language Editor")]
-        static private void OpenEditorWindow() {
+        static private void OpenEditorWindow()
+        {
             GetWindow<LanguageEditWindow>("Language Editor");
         }
 
@@ -34,19 +36,22 @@ namespace MPack {
         private GUIStyle m_scrollBarStyle;
         private GUIStyle m_headerStyle;
 
-        private void OnEnable() {
+        private void OnEnable()
+        {
             string[] files = AssetDatabase.FindAssets("t:LanguageData");
             m_languages = new LanguageData[files.Length];
             m_languageNames = new string[files.Length];
 
             List<int> dataIdList = new List<int>();
-            for (int i = 0; i < files.Length; i++) {
+            for (int i = 0; i < files.Length; i++)
+            {
                 string path = AssetDatabase.GUIDToAssetPath(files[i]);
                 LanguageData data = AssetDatabase.LoadAssetAtPath<LanguageData>(path);
                 m_languages[i] = data;
                 m_languageNames[i] = data.name;
 
-                for (int j = 0; j < data.Texts.Length; j++) {
+                for (int j = 0; j < data.Texts.Length; j++)
+                {
                     if (!dataIdList.Contains(data.Texts[j].ID))
                     {
                         dataIdList.Add(data.Texts[j].ID);
@@ -65,16 +70,20 @@ namespace MPack {
             m_headerStyle.normal.textColor = Color.white;
         }
 
-        private void ScanTextInEveryLanguageData() {
+        private void ScanTextInEveryLanguageData()
+        {
             List<char> allChars = new List<char>();
             if (addAlphabet) allChars.AddRange(Alphabet.ToCharArray());
             if (addNumber) allChars.AddRange(Number.ToCharArray());
             if (addSymbol) allChars.AddRange(Symbol.ToCharArray());
 
-            for (int i = 0; i < m_languages.Length; i++) {
-                for (int j = 0; j < m_languages[i].Texts.Length; j++) {
+            for (int i = 0; i < m_languages.Length; i++)
+            {
+                for (int j = 0; j < m_languages[i].Texts.Length; j++)
+                {
                     char[] chars = m_languages[i].Texts[j].Text.ToCharArray();
-                    foreach (char chr in chars) {
+                    foreach (char chr in chars)
+                    {
                         if (!allChars.Contains(chr)) allChars.Add(chr);
                     }
                 }
@@ -84,27 +93,32 @@ namespace MPack {
             Debug.Log(allCharString);
         }
 
-        private void DrawRow(int ID, float width) {
+        private void DrawRow(int ID, float width)
+        {
             int[] textIndex = new int[m_languages.Length];
             int lineCount = 0;
 
             // Find out all the text is link to this id
-            for (int i = 0; i < m_languages.Length; i++) {
+            for (int i = 0; i < m_languages.Length; i++)
+            {
                 bool assigned = false;
-                for (int j = 0; j < m_languages[i].Texts.Length; j++) {
-                    if (m_languages[i].Texts[j].ID == ID) {
+                for (int j = 0; j < m_languages[i].Texts.Length; j++)
+                {
+                    if (m_languages[i].Texts[j].ID == ID)
+                    {
                         assigned = true;
                         textIndex[i] = j;
 
                         int count = m_languages[i].Texts[j].Text.Split(
                             new string[] { "\n" }, System.StringSplitOptions.None).Length;
-                        
+
                         if (count > lineCount) lineCount = count;
                         break;
                     }
                 }
 
-                if (!assigned) {
+                if (!assigned)
+                {
                     Array.Resize(ref m_languages[i].Texts, m_languages[i].Texts.Length + 1);
                     int last = m_languages[i].Texts.Length - 1;
                     m_languages[i].Texts[last].ID = ID;
@@ -127,12 +141,14 @@ namespace MPack {
             labelRect.x += LabelWidth + 2;
             labelRect.width = LanguageWidth;
 
-            for (int i = 0; i < m_languages.Length; i++) {
+            for (int i = 0; i < m_languages.Length; i++)
+            {
                 int power = Mathf.RoundToInt(Mathf.Pow(2, i));
 
                 if (m_displayLanguage == -1 || ((power & m_displayLanguage) == power))
                 {
-                    if (textIndex[i] != -1) {
+                    if (textIndex[i] != -1)
+                    {
                         EditorGUI.BeginChangeCheck();
                         m_languages[i].Texts[textIndex[i]].Text = EditorGUI.TextArea(labelRect, m_languages[i].Texts[textIndex[i]].Text);
                         if (EditorGUI.EndChangeCheck())
@@ -164,10 +180,12 @@ namespace MPack {
             labelRect.height -= 3;
 
 
-            for (int i = 0; i < m_languageNames.Length; i++) {
+            for (int i = 0; i < m_languageNames.Length; i++)
+            {
                 int power = Mathf.RoundToInt(Mathf.Pow(2, i));
 
-                if (m_displayLanguage == -1 || ((power & m_displayLanguage) == power)) {
+                if (m_displayLanguage == -1 || ((power & m_displayLanguage) == power))
+                {
                     EditorGUI.LabelField(labelRect, m_languageNames[i], m_headerStyle);
                     labelRect.x += labelRect.width + 2;
                 }
@@ -180,13 +198,15 @@ namespace MPack {
             EditorGUI.DrawRect(hrRect, LineColor);
         }
 
-        private void OnGUI() {
-            // addAlphabet = EditorGUILayout.Toggle("Auto Include alphabet", addAlphabet);
-            // addNumber = EditorGUILayout.Toggle("Auto Include number", addNumber);
-            // addSymbol = EditorGUILayout.Toggle("Audo Include symbol", addSymbol);
-            // if (GUILayout.Button("Scan Text in Every LanguageData")) {
-            //     ScanTextInEveryLanguageData();
-            // }
+        private void OnGUI()
+        {
+            addAlphabet = EditorGUILayout.Toggle("Auto Include alphabet", addAlphabet);
+            addNumber = EditorGUILayout.Toggle("Auto Include number", addNumber);
+            addSymbol = EditorGUILayout.Toggle("Audo Include symbol", addSymbol);
+            if (GUILayout.Button("Scan Text in Every LanguageData"))
+            {
+                ScanTextInEveryLanguageData();
+            }
 
 
             m_displayLanguage = EditorGUILayout.MaskField(
@@ -215,11 +235,36 @@ namespace MPack {
 
             scrollViewPos = EditorGUILayout.BeginScrollView(scrollViewPos, false, false);
 
-            for (int i = 0; i < m_languageDataIDs.Length; i++) {
+            for (int i = 0; i < m_languageDataIDs.Length; i++)
+            {
                 DrawRow(m_languageDataIDs[i], width);
             }
             EditorGUILayout.EndScrollView();
         }
 
+
+        [MenuItem("MPack/Sort Language File", true)]
+        public static bool ValidateSortLanguageFile()
+        {
+            UnityEngine.Object _object = Selection.activeObject;
+            if (!_object)
+                return false;
+
+            if (!(_object is LanguageData))
+                return false;
+
+            return true;
+        }
+
+        [MenuItem("MPack/Sort Language File")]
+        public static void SortLanguageFile()
+        {
+            LanguageData data = (LanguageData)Selection.activeObject;
+
+            System.Array.Sort(data.Texts, (pair1, pair2) =>
+            {
+                return pair1.ID - pair2.ID;
+            });
+        }
     }
 }

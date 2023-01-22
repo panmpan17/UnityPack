@@ -10,7 +10,7 @@ public class TestLanguage : MonoBehaviour
     private bool main = true;
 
     [SerializeField]
-    [LauguageID]
+    [LanguageID]
     private int test;
 
     private void Start() {

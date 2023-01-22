@@ -19,9 +19,10 @@ namespace MPack {
             public string Text;
         }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         [CustomPropertyDrawer(typeof(IDTextPair))]
-        public class _PropertyDrawer : PropertyDrawer {
+        public class _PropertyDrawer : PropertyDrawer
+        {
             private const float Height = 18, LineHeight = 15;
 
             public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
@@ -46,17 +47,20 @@ namespace MPack {
         }
 
         [CustomEditor(typeof(LanguageData))]
-        public class _Editor : Editor {
+        public class _Editor : Editor
+        {
             ReorderableList Texts;
 
             private void OnEnable()
             {
                 Texts = new ReorderableList(serializedObject, serializedObject.FindProperty("Texts"));
                 Texts.drawHeaderCallback = (rect) => EditorGUI.LabelField(rect, "Texts");
-                Texts.elementHeightCallback = (index) => {
+                Texts.elementHeightCallback = (index) =>
+                {
                     return EditorGUI.GetPropertyHeight(Texts.serializedProperty.GetArrayElementAtIndex(index), GUIContent.none);
                 };
-                Texts.drawElementCallback = (rect, index, _f, _s) => {
+                Texts.drawElementCallback = (rect, index, _f, _s) =>
+                {
                     EditorGUI.PropertyField(rect, Texts.serializedProperty.GetArrayElementAtIndex(index));
                 };
             }
@@ -70,6 +74,6 @@ namespace MPack {
                 serializedObject.ApplyModifiedProperties();
             }
         }
-    #endif
+#endif
     }
 }
