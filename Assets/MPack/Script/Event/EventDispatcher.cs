@@ -57,9 +57,10 @@ namespace MPack
             void OnEnable()
             {
                 dispatcher = (EventDispatcher) target;
-                mode = dispatcher.parameterMode;
-
                 eventProperty = serializedObject.FindProperty("eventReference");
+
+                AbstractEventRefernece _event = (AbstractEventRefernece)eventProperty.objectReferenceValue;
+                mode = ChangeEventDisplayMode(_event);
             }
 
             public override void OnInspectorGUI()
