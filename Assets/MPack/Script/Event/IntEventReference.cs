@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MPack
 {
-    [CreateAssetMenu(menuName="MPack/Event (int)", order=0)]
+    [CreateAssetMenu(menuName="MPack/Event/int", order=2)]
     public class IntEventReference : AbstractEventRefernece
     {
         private event System.Action<int> triggerEvent;

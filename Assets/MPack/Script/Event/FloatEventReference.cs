@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MPack
 {
-    [CreateAssetMenu(menuName="MPack/Event (float)", order=0)]
+    [CreateAssetMenu(menuName="MPack/Event/float", order=3)]
     public class FloatEventReference : AbstractEventRefernece
     {
         private event System.Action<float> triggerEvent;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MPack
 {
-    [CreateAssetMenu(menuName="MPack/Event (bool)", order=0)]
+    [CreateAssetMenu(menuName="MPack/Event/bool", order=1)]
     public class BoolEventReference : AbstractEventRefernece
     {
         private event System.Action<bool> triggerEvent;

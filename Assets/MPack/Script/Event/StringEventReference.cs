@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MPack
 {
-    [CreateAssetMenu(menuName="MPack/Event (string)", order=0)]
+    [CreateAssetMenu(menuName="MPack/Event/string", order=4)]
     public class StringEventReference : AbstractEventRefernece
     {
         private event System.Action<string> triggerEvent;

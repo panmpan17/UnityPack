@@ -234,5 +234,19 @@ namespace MPack {
                 PutRecursivly(objT.GetChild(0));
             Put(objT.gameObject);
         }
+
+        public void PutAllAliveObjects()
+        {
+            int length = AliveObjs.Count;
+            for (int i = 0; i < length; i++)
+            {
+                GameObject obj = AliveObjs[i];
+                PoolObjs.Add(obj);
+                obj.SetActive(false);
+                obj.transform.SetParent(PoolCollection);
+            }
+
+            AliveObjs.Clear();
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace MPack
         public void UnregisterEvent(EventDispatcher dispatcher) => eventDispatchers.Remove(dispatcher);
     }
 
-    [CreateAssetMenu(menuName="MPack/Event", order=0)]
+    [CreateAssetMenu(menuName="MPack/Event/No Parameter", order=0)]
     public class EventReference : AbstractEventRefernece
     {
         private event System.Action triggerEvent;
