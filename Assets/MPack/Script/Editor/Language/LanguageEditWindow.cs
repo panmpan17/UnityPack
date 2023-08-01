@@ -31,7 +31,7 @@ namespace MPack
         private string[] m_languageNames;
         private int[] m_languageDataIDs;
 
-        private int m_displayLanguage;
+        private int m_displayLanguage = int.MaxValue;
 
         private GUIStyle m_scrollBarStyle;
         private GUIStyle m_headerStyle;

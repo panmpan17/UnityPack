@@ -6,3 +6,5 @@ obj/
 Logs/
 Library/
 .vscode/
+.DS_Store
+UserSettings/

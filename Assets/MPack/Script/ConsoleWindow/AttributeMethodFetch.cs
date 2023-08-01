@@ -31,8 +31,7 @@ namespace MPack
         {
             List<CommandMethod> commands = new List<CommandMethod>();
 
-            MethodInfo[] infos = type.GetMethods(
-                BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+            MethodInfo[] infos = type.GetMethods(BindingFlags.Static | BindingFlags.Public);
             foreach (var method in infos)
             {
                 ConsoleCommandAttribute commandAttr = (ConsoleCommandAttribute)method.GetCustomAttribute(typeof(ConsoleCommandAttribute), true);
@@ -87,7 +86,7 @@ namespace MPack
             return true;
         }
 
-        private string[] SplitCommandInput(string command)
+        public string[] SplitCommandInput(string command)
         {
             List<string> commands = new List<string>();
             int searchedIndex = 0;
@@ -120,7 +119,7 @@ namespace MPack
                     searchedIndex = secondQuote + 1;
                 }
 
-                if (searchedIndex >= command.Length - 1 || searchedIndex == -1)
+                if (searchedIndex > command.Length - 1 || searchedIndex == -1)
                     break;
             }
 

@@ -33,6 +33,8 @@ namespace MPack
             if (useVariableProperty == null)
                 OnEnable(property);
 
+            EditorGUI.BeginProperty(position, label, property);
+
             position.y += 1;
 
             Rect labelRect = position;
@@ -50,12 +52,11 @@ namespace MPack
             EditorGUI.LabelField(labelRect, label);
             EditorGUI.LabelField(settingIconRect, settingIcon);
 
-            serializedObject.Update();
-
             DrawValue(rest);
 
             HandleContextnMenu(settingIconRect);
-            serializedObject.ApplyModifiedProperties();
+
+            EditorGUI.EndProperty();
         }
 
         protected abstract void DrawValue(Rect rest);
