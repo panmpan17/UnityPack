@@ -8,3 +8,6 @@ Library/
 .vscode/
 .DS_Store
 UserSettings/
+
+ChatGPTAPIKey.asset
+ChatGPTAPIKey.asset.meta

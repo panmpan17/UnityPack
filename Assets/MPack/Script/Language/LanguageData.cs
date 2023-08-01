@@ -12,6 +12,7 @@ namespace MPack {
     public class LanguageData : ScriptableObject {
         public int ID;
         public IDTextPair[] Texts;
+        public bool IgnoreTranslation;
 
         [System.Serializable]
         public struct IDTextPair {

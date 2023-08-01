@@ -30,11 +30,15 @@ namespace MPack
         private LanguageData[] m_languages;
         private string[] m_languageNames;
         private int[] m_languageDataIDs;
+        private int[] m_languageDataIDsFiltered;
+        private List<int> m_dataIDTranslationFetching = new List<int>();
 
         private int m_displayLanguage = int.MaxValue;
 
         private GUIStyle m_scrollBarStyle;
         private GUIStyle m_headerStyle;
+
+        private string m_searchText = "";
 
         private void OnEnable()
         {
@@ -97,17 +101,25 @@ namespace MPack
         {
             int[] textIndex = new int[m_languages.Length];
             int lineCount = 0;
+            bool canAutoTranslate = false;
 
             // Find out all the text is link to this id
             for (int i = 0; i < m_languages.Length; i++)
             {
+                var language = m_languages[i];
                 bool assigned = false;
-                for (int j = 0; j < m_languages[i].Texts.Length; j++)
+
+                for (int j = 0; j < language.Texts.Length; j++)
                 {
-                    if (m_languages[i].Texts[j].ID == ID)
+                    var pair = language.Texts[j];
+
+                    if (pair.ID == ID)
                     {
                         assigned = true;
                         textIndex[i] = j;
+
+                        if (!language.IgnoreTranslation && pair.Text == "")
+                            canAutoTranslate = true;
 
                         int count = m_languages[i].Texts[j].Text.Split(
                             new string[] { "\n" }, System.StringSplitOptions.None).Length;
@@ -124,6 +136,7 @@ namespace MPack
                     m_languages[i].Texts[last].ID = ID;
                     m_languages[i].Texts[last].Text = "";
                     textIndex[i] = last;
+                    canAutoTranslate = true;
                 }
             }
 
@@ -136,7 +149,18 @@ namespace MPack
             labelRect.y++;
 
             EditorGUI.DrawRect(labelRect, IDLabelBGColor);
-            GUI.Label(labelRect, ID.ToString());
+            
+            
+            // Debug.Log(canAutoTranslate);
+            if (canAutoTranslate)
+            {
+                if (m_dataIDTranslationFetching.Contains(ID))
+                    GUI.Label(labelRect, "Fecthing");
+                else if (GUI.Button(labelRect, ID.ToString()))
+                    DoAutoTranslate(ID);
+            }
+            else GUI.Label(labelRect, ID.ToString());
+
 
             labelRect.x += LabelWidth + 2;
             labelRect.width = LanguageWidth;
@@ -222,6 +246,8 @@ namespace MPack
                 }
             }
 
+            DrawSearchBar();
+
             EditorGUILayout.BeginScrollView(
                 new Vector2(scrollViewPos.x, 0),
                 false,
@@ -235,11 +261,128 @@ namespace MPack
 
             scrollViewPos = EditorGUILayout.BeginScrollView(scrollViewPos, false, false);
 
+            if (m_searchText != "")
+            {
+                for (int i = 0; i < m_languageDataIDsFiltered.Length; i++)
+                    DrawRow(m_languageDataIDs[m_languageDataIDsFiltered[i]], width);
+            }
+            else
+            {
+                for (int i = 0; i < m_languageDataIDs.Length; i++)
+                    DrawRow(m_languageDataIDs[i], width);
+            }
+
+            EditorGUILayout.EndScrollView();
+        }
+
+        void DrawSearchBar()
+        {
+            EditorGUILayout.Space(20);
+
+            EditorGUI.BeginChangeCheck();
+            m_searchText = EditorGUILayout.TextField("Search", m_searchText);
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                FilterLanguageDataIDBySearch();
+            }
+
+            EditorGUILayout.Space(20);
+        }
+
+        void FilterLanguageDataIDBySearch()
+        {
+            m_searchText = m_searchText.ToLower();
+
+            List<int> filtered = new List<int>();
+            for (int i = 0; i < m_languageDataIDs.Length; i++) {
+                int id = m_languageDataIDs[i];
+                string text = id.ToString();
+                if (text.Contains(m_searchText))
+                    filtered.Add(i);
+            }
+
+            int index = 0;
+            for (int i = 0; i < m_languages.Length; i++)
+            {
+                var language = m_languages[i];
+
+                for (int j = 0; j < language.Texts.Length; j++)
+                {
+                    if (language.Texts[j].Text.ToLower().Contains(m_searchText))
+                    {
+                        index = LanguageIDIndex(language.Texts[j].ID);
+                        if (!filtered.Contains(index))
+                            filtered.Add((index));
+                    }
+                }
+            }
+
+            m_languageDataIDsFiltered = filtered.ToArray();
+        }
+
+        int LanguageIDIndex(int languageID)
+        {
             for (int i = 0; i < m_languageDataIDs.Length; i++)
             {
-                DrawRow(m_languageDataIDs[i], width);
+                if (m_languageDataIDs[i] == languageID)
+                    return i;
             }
-            EditorGUILayout.EndScrollView();
+            return -1;
+        }
+
+
+        async void DoAutoTranslate(int languageID)
+        {
+            m_dataIDTranslationFetching.Add(languageID);
+
+            string originalLanguage = "";
+            string toLanguage = "";
+            int toLanguageIndex = 0;
+            int textIndex = 0;
+
+            // Find Original language and the language to translate to
+            for (int i = 0; i < m_languages.Length; i++) {
+                var language = m_languages[i];
+                if (language.IgnoreTranslation)
+                    continue;
+
+                for (int e = 0; e < language.Texts.Length; e++)
+                {
+                    var pair = m_languages[i].Texts[e];
+                    if (pair.ID != languageID)
+                        continue;
+
+                    if (pair.Text != "")
+                    {
+                        originalLanguage = pair.Text;
+                        break;
+                    }
+                    else
+                    {
+                        toLanguage = m_languages[i].name;
+                        toLanguageIndex = i;
+                        textIndex = e;
+                        break;
+                    }
+                }
+            }
+
+            Repaint();
+            Debug.Log($"Original Language: {originalLanguage}, To Language: {toLanguage}");
+
+            var response = await ChatGPTRequest.Translate(toLanguage, originalLanguage);
+            string content = response.choices[0].message.content;
+
+            // string content = "\"Hi, we meet again!\"";
+
+            content = content.TrimStart('"');
+            content = content.TrimEnd('"');
+
+            m_languages[toLanguageIndex].Texts[textIndex].Text = content;
+            Repaint();
+
+            m_dataIDTranslationFetching.Remove(languageID);
         }
 
 

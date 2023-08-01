@@ -19,12 +19,13 @@ MonoBehaviour:
   - ID: 2
     Text: Test
   - ID: 4
-    Text: 
+    Text: Test for language edit window
   - ID: 5
-    Text: 
+    Text: Test for language edit window
   - ID: 6
     Text: 
   - ID: 7
     Text: 
   - ID: 3
     Text: awd
+  IgnoreTranslation: 0
