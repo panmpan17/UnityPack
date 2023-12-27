@@ -12,7 +12,7 @@ namespace MPack
     public static class ChatGPTRequest
     {
         // private const string OPENAI_APIKEY = "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";
-        private const string API_KEY_FILE_PATH = "Assets/MPack/Script/Editor/Language/ChatGPTAPIKey.asset";
+        private const string API_KEY_FILE_PATH = "Assets/MPack/Language/Scripts/Editor/GPTAPIKey.asset";
 
         [MenuItem("MPack/ChatGPT/Create API key file")]
         public static void CreateAPIKeyFile()
