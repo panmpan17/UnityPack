@@ -3,55 +3,59 @@ using System.Collections.Generic;
 using UnityEngine;
 using MPack;
 
-public class LanguageAssign : MonoBehaviour
+
+namespace MPack
 {
-    public static LanguageAssign ins;
-    private static int s_currentIndex = 0;
-
-    [SerializeField]
-    private LanguageData[] languages;
-
-    void Awake()
+    public class LanguageAssign : MonoBehaviour
     {
-        if (ins)
+        public static LanguageAssign ins;
+        private static int s_currentIndex = 0;
+
+        [SerializeField]
+        private LanguageData[] languages;
+
+        void Awake()
         {
-            Destroy(gameObject);
-            return;
+            if (ins)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            ins = this;
+            LanguageMgr.AssignLanguageData(languages[s_currentIndex]);
         }
 
-        ins = this;
-        LanguageMgr.AssignLanguageData(languages[s_currentIndex]);
-    }
-
-    public void NextLanguage()
-    {
-        if (++s_currentIndex >= languages.Length)
+        public void NextLanguage()
         {
-            s_currentIndex = 0;
+            if (++s_currentIndex >= languages.Length)
+            {
+                s_currentIndex = 0;
+            }
+
+            LanguageMgr.AssignLanguageData(languages[s_currentIndex]);
         }
 
-        LanguageMgr.AssignLanguageData(languages[s_currentIndex]);
-    }
-
-    public void PreviousLanguage()
-    {
-        if (--s_currentIndex < 0)
+        public void PreviousLanguage()
         {
-            s_currentIndex = languages.Length - 1;
+            if (--s_currentIndex < 0)
+            {
+                s_currentIndex = languages.Length - 1;
+            }
+
+            LanguageMgr.AssignLanguageData(languages[s_currentIndex]);
         }
 
-        LanguageMgr.AssignLanguageData(languages[s_currentIndex]);
-    }
-
-    public void SetLanguage(int index)
-    {
-        if (index < 0 || index >= languages.Length)
+        public void SetLanguage(int index)
         {
-            Debug.LogError("Language index out of range");
-            return;
-        }
+            if (index < 0 || index >= languages.Length)
+            {
+                Debug.LogError("Language index out of range");
+                return;
+            }
 
-        s_currentIndex = index;
-        LanguageMgr.AssignLanguageData(languages[s_currentIndex]);
+            s_currentIndex = index;
+            LanguageMgr.AssignLanguageData(languages[s_currentIndex]);
+        }
     }
 }

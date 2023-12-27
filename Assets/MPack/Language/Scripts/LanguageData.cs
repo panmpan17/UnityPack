@@ -13,6 +13,16 @@ namespace MPack {
         public int ID;
         public IDTextPair[] Texts;
         public bool IgnoreTranslation;
+        
+
+        [ContextMenu("Sort")]
+        public void Sort()
+        {
+            System.Array.Sort(Texts, (pair1, pair2) =>
+            {
+                return pair1.ID - pair2.ID;
+            });
+        }
 
         [System.Serializable]
         public struct IDTextPair {

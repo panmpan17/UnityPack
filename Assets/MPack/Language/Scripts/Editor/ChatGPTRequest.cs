@@ -14,10 +14,11 @@ namespace MPack
         // private const string OPENAI_APIKEY = "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";
         private const string API_KEY_FILE_PATH = "Assets/MPack/Language/Scripts/Editor/GPTAPIKey.asset";
 
-        [MenuItem("MPack/ChatGPT/Create API key file")]
+        [MenuItem("Tools/MPack/Language - Create GPT API file")]
         public static void CreateAPIKeyFile()
         {
             var key = ScriptableObject.CreateInstance<StringVariable>();
+            key.Value = "Your API Key Here!";
             AssetDatabase.CreateAsset(key, API_KEY_FILE_PATH);
             AssetDatabase.SaveAssets();
         }

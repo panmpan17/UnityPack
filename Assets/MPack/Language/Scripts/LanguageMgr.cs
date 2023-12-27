@@ -25,11 +25,11 @@ namespace MPack {
                 texts[i].SetText(GetTextById(texts[i].ID));
             }
             
-            CompositeLanguageText[] compoundTexts = GameObject.FindObjectsOfType<CompositeLanguageText>();
+            CompositeLanguageText[] compositeTexts = GameObject.FindObjectsOfType<CompositeLanguageText>();
 
-            for (int i = 0; i < texts.Length; i++)
+            for (int i = 0; i < compositeTexts.Length; i++)
             {
-                texts[i].SetText(GetTextById(texts[i].ID));
+                compositeTexts[i].Reload();
             }
 		}
 

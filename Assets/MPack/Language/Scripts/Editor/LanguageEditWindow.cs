@@ -19,8 +19,8 @@ namespace MPack
 
         private bool addAlphabet = true, addNumber = true, addSymbol = true;
 
-        [MenuItem("Window/Language Editor")]
-        [MenuItem("MPack/Language Editor")]
+        [MenuItem("Window/MPack/Language Editor")]
+        [MenuItem("Tools/Language Editor")]
         static private void OpenEditorWindow()
         {
             GetWindow<LanguageEditWindow>("Language Editor");
@@ -44,7 +44,6 @@ namespace MPack
         {
             string[] files = AssetDatabase.FindAssets("t:LanguageData");
             m_languages = new LanguageData[files.Length];
-            m_languageNames = new string[files.Length];
 
             List<int> dataIdList = new List<int>();
             for (int i = 0; i < files.Length; i++)
@@ -52,15 +51,19 @@ namespace MPack
                 string path = AssetDatabase.GUIDToAssetPath(files[i]);
                 LanguageData data = AssetDatabase.LoadAssetAtPath<LanguageData>(path);
                 m_languages[i] = data;
-                m_languageNames[i] = data.name;
 
                 for (int j = 0; j < data.Texts.Length; j++)
                 {
                     if (!dataIdList.Contains(data.Texts[j].ID))
-                    {
                         dataIdList.Add(data.Texts[j].ID);
-                    }
                 }
+            }
+
+            Array.Sort(m_languages, (data1, data2) => data1.ID - data2.ID);
+            m_languageNames = new string[m_languages.Length];
+            for (int i = 0; i < m_languages.Length; i++)
+            {
+                m_languageNames[i] = m_languages[i].name;
             }
 
             dataIdList.Sort();
@@ -383,31 +386,6 @@ namespace MPack
             Repaint();
 
             m_dataIDTranslationFetching.Remove(languageID);
-        }
-
-
-        [MenuItem("MPack/Sort Language File", true)]
-        public static bool ValidateSortLanguageFile()
-        {
-            UnityEngine.Object _object = Selection.activeObject;
-            if (!_object)
-                return false;
-
-            if (!(_object is LanguageData))
-                return false;
-
-            return true;
-        }
-
-        [MenuItem("MPack/Sort Language File")]
-        public static void SortLanguageFile()
-        {
-            LanguageData data = (LanguageData)Selection.activeObject;
-
-            System.Array.Sort(data.Texts, (pair1, pair2) =>
-            {
-                return pair1.ID - pair2.ID;
-            });
         }
     }
 
