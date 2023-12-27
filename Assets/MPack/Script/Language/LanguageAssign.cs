@@ -42,4 +42,16 @@ public class LanguageAssign : MonoBehaviour
 
         LanguageMgr.AssignLanguageData(languages[s_currentIndex]);
     }
+
+    public void SetLanguage(int index)
+    {
+        if (index < 0 || index >= languages.Length)
+        {
+            Debug.LogError("Language index out of range");
+            return;
+        }
+
+        s_currentIndex = index;
+        LanguageMgr.AssignLanguageData(languages[s_currentIndex]);
+    }
 }

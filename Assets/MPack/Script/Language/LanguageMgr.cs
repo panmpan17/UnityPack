@@ -5,7 +5,6 @@ namespace MPack {
     public static class LanguageMgr
     {
         static private LanguageData languageData;
-		// static private List<LanguageText> texts = new List<LanguageText>();
 
         static public bool DataLoaded {
             get {
@@ -23,7 +22,14 @@ namespace MPack {
 
             for (int i = 0; i < texts.Length; i++)
             {
-                texts[i].Text = GetTextById(texts[i].ID);
+                texts[i].SetText(GetTextById(texts[i].ID));
+            }
+            
+            CompositeLanguageText[] compoundTexts = GameObject.FindObjectsOfType<CompositeLanguageText>();
+
+            for (int i = 0; i < texts.Length; i++)
+            {
+                texts[i].SetText(GetTextById(texts[i].ID));
             }
 		}
 
