@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.Graphs;
 
 namespace MPack
 {
@@ -20,7 +21,7 @@ namespace MPack
         private bool addAlphabet = true, addNumber = true, addSymbol = true;
 
         [MenuItem("Window/MPack/Language Editor")]
-        [MenuItem("Tools/Language Editor")]
+        [MenuItem("Tools/MPack/Language Editor")]
         static private void OpenEditorWindow()
         {
             GetWindow<LanguageEditWindow>("Language Editor");
@@ -225,17 +226,12 @@ namespace MPack
             EditorGUI.DrawRect(hrRect, LineColor);
         }
 
+
+        // private bool _textMeshProScan = false;
         private void OnGUI()
         {
-            addAlphabet = EditorGUILayout.Toggle("Auto Include alphabet", addAlphabet);
-            addNumber = EditorGUILayout.Toggle("Auto Include number", addNumber);
-            addSymbol = EditorGUILayout.Toggle("Audo Include symbol", addSymbol);
-            if (GUILayout.Button("Scan Text in Every LanguageData"))
-            {
-                ScanTextInEveryLanguageData();
-            }
 
-
+            EditorGUILayout.BeginHorizontal();
             m_displayLanguage = EditorGUILayout.MaskField(
                 "Display Language", m_displayLanguage, m_languageNames);
 
@@ -250,6 +246,11 @@ namespace MPack
             }
 
             DrawSearchBar();
+            EditorGUILayout.EndHorizontal();
+
+            DrawScanText();
+
+            EditorGUILayout.Space(20);
 
             EditorGUILayout.BeginScrollView(
                 new Vector2(scrollViewPos.x, 0),
@@ -278,10 +279,24 @@ namespace MPack
             EditorGUILayout.EndScrollView();
         }
 
+
+        void DrawScanText()
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Scan Characters");
+            addAlphabet = EditorGUILayout.Toggle("Include alphabet", addAlphabet);
+            addNumber = EditorGUILayout.Toggle("Include number", addNumber);
+            addSymbol = EditorGUILayout.Toggle("Include symbol", addSymbol);
+            if (GUILayout.Button("Scan Text in Every LanguageData"))
+            {
+                ScanTextInEveryLanguageData();
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+
         void DrawSearchBar()
         {
-            EditorGUILayout.Space(20);
-
             EditorGUI.BeginChangeCheck();
             m_searchText = EditorGUILayout.TextField("Search", m_searchText);
 
@@ -289,8 +304,6 @@ namespace MPack
             {
                 FilterLanguageDataIDBySearch();
             }
-
-            EditorGUILayout.Space(20);
         }
 
         void FilterLanguageDataIDBySearch()
@@ -374,18 +387,30 @@ namespace MPack
             Repaint();
             Debug.Log($"Original Language: {originalLanguage}, To Language: {toLanguage}");
 
-            var response = await ChatGPTRequest.Translate(toLanguage, originalLanguage);
-            string content = response.choices[0].message.content;
+            ChatGPTRequest.ResponseJSON response = await ChatGPTRequest.Translate(toLanguage, originalLanguage);
 
-            // string content = "\"Hi, we meet again!\"";
+            Debug.Log(response.error);
+            Debug.Log(response.error.message);
+            Debug.Log(response.error.code);
 
-            content = content.TrimStart('"');
-            content = content.TrimEnd('"');
+            if (response.error.message != null)
+            {
+                Debug.Log(response.error.message);
+                EditorUtility.DisplayDialog("GPT Error", "check console", "OK");
+                m_dataIDTranslationFetching.Remove(languageID);
+                Repaint();
+                return;
+            }
 
-            m_languages[toLanguageIndex].Texts[textIndex].Text = content;
-            Repaint();
+            // string content = response.choices[0].message.content;
 
-            m_dataIDTranslationFetching.Remove(languageID);
+            // content = content.TrimStart('"');
+            // content = content.TrimEnd('"');
+
+            // m_languages[toLanguageIndex].Texts[textIndex].Text = content;
+            // Repaint();
+
+            // m_dataIDTranslationFetching.Remove(languageID);
         }
     }
 

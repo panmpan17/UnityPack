@@ -80,6 +80,8 @@ namespace MPack {
             {
                 serializedObject.Update();
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("ID"));
+
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("IgnoreTranslation"));
                 GUILayout.Space(5);
                 Texts.DoLayoutList();
                 serializedObject.ApplyModifiedProperties();

@@ -22,4 +22,8 @@ MonoBehaviour:
     Text: Test for language edit window
   - ID: 5
     Text: 
+  - ID: 6
+    Text: 'Multiple Line
+
+      Support'
   IgnoreTranslation: 0

@@ -11,16 +11,21 @@ namespace MPack
 {
     public static class ChatGPTRequest
     {
-        // private const string OPENAI_APIKEY = "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";
         private const string API_KEY_FILE_PATH = "Assets/MPack/Language/Scripts/Editor/GPTAPIKey.asset";
 
         [MenuItem("Tools/MPack/Language - Create GPT API file")]
         public static void CreateAPIKeyFile()
         {
-            var key = ScriptableObject.CreateInstance<StringVariable>();
-            key.Value = "Your API Key Here!";
-            AssetDatabase.CreateAsset(key, API_KEY_FILE_PATH);
-            AssetDatabase.SaveAssets();
+            var key = AssetDatabase.LoadAssetAtPath<StringVariable>(API_KEY_FILE_PATH);
+            if (key == null)
+            {
+                key = ScriptableObject.CreateInstance<StringVariable>();
+                key.Value = "Your API Key Here!";
+                AssetDatabase.CreateAsset(key, API_KEY_FILE_PATH);
+                AssetDatabase.SaveAssets();
+            }
+            
+            Selection.activeObject = key;
         }
 
         public static string GetAPIKey()
@@ -50,8 +55,9 @@ namespace MPack
             };
 
             // Install Unity Package "com.unity.nuget.newtonsoft-json"
-            var response = await GetChatResponse(endpoint, Newtonsoft.Json.JsonConvert.SerializeObject(data));
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseJSON>(response);
+            string response = await GetChatResponse(endpoint, JsonUtility.ToJson(data));
+            Debug.Log(response);
+            return JsonUtility.FromJson<ResponseJSON>(response);
         }
 
         static async Task<string> GetChatResponse(string endpoint, string data)
@@ -71,6 +77,7 @@ namespace MPack
             }
         }
 
+        [Serializable]
         public struct ResponseJSON
         {
             public string id;
@@ -79,6 +86,7 @@ namespace MPack
             public string model;
             public Choice[] choices;
             public Usage usage;
+            public ErrorMessage error;
 
             public struct Choice
             {
@@ -95,6 +103,8 @@ namespace MPack
             }
         }
 
+
+        [Serializable]
         public struct Message
         {
             public string role;
@@ -105,6 +115,15 @@ namespace MPack
                 this.role = role;
                 this.content = content;
             }
+        }
+
+        [Serializable]
+        public struct ErrorMessage
+        {
+            public string message;
+            public string type;
+            public string param;
+            public string code;
         }
     }
 }

@@ -102,6 +102,11 @@ namespace MPack
             {
                 s_languageDataReferences[i] = AssetDatabase.LoadAssetAtPath<LanguageData>(AssetDatabase.GUIDToAssetPath(assets[i]));
             }
+
+            Array.Sort(s_languageDataReferences, (a, b) =>
+            {
+                return a.ID - b.ID;
+            });
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

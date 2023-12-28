@@ -12,25 +12,42 @@ namespace MPack
         private static int s_currentIndex = 0;
 
         [SerializeField]
+        private bool destroyDuplicatedGameObject = false;
+        [SerializeField]
+        private bool dontDestroyOnLoad = false;
+        [SerializeField]
+        private bool loopIndex = true;
+        [SerializeField]
         private LanguageData[] languages;
 
         void Awake()
         {
             if (ins)
             {
-                Destroy(gameObject);
+                if (destroyDuplicatedGameObject)
+                    Destroy(gameObject);
+                else
+                    Destroy(this);
                 return;
             }
 
             ins = this;
             LanguageMgr.AssignLanguageData(languages[s_currentIndex]);
+
+            if (dontDestroyOnLoad)
+            {
+                DontDestroyOnLoad(gameObject);
+            }
         }
 
         public void NextLanguage()
         {
             if (++s_currentIndex >= languages.Length)
             {
-                s_currentIndex = 0;
+                if (loopIndex)
+                    s_currentIndex = 0;
+                else
+                    s_currentIndex = languages.Length - 1;
             }
 
             LanguageMgr.AssignLanguageData(languages[s_currentIndex]);
@@ -40,13 +57,32 @@ namespace MPack
         {
             if (--s_currentIndex < 0)
             {
-                s_currentIndex = languages.Length - 1;
+                if (loopIndex)
+                    s_currentIndex = languages.Length - 1;
+                else
+                    s_currentIndex = 0;
             }
 
             LanguageMgr.AssignLanguageData(languages[s_currentIndex]);
         }
 
-        public void SetLanguage(int index)
+
+        public void SetLanguageByID(int ID)
+        {
+            for (int i = 0; i < languages.Length; i++)
+            {
+                if (languages[i].ID == ID)
+                {
+                    s_currentIndex = i;
+                    LanguageMgr.AssignLanguageData(languages[s_currentIndex]);
+                    return;
+                }
+            }
+
+            Debug.LogError("Language ID not found");
+        }
+
+        public void SetLanguageByIndex(int index)
         {
             if (index < 0 || index >= languages.Length)
             {
