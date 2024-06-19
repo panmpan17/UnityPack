@@ -8,5 +8,10 @@ namespace MPack
     {
         public float Min;
         public float Max;
+
+#if UNITY_EDITOR
+        [TextArea]
+        public string Note;
+#endif
     }
 }

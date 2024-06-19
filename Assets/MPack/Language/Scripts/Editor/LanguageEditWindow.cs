@@ -389,10 +389,6 @@ namespace MPack
 
             ChatGPTRequest.ResponseJSON response = await ChatGPTRequest.Translate(toLanguage, originalLanguage);
 
-            Debug.Log(response.error);
-            Debug.Log(response.error.message);
-            Debug.Log(response.error.code);
-
             if (response.error.message != null)
             {
                 Debug.Log(response.error.message);
@@ -402,15 +398,15 @@ namespace MPack
                 return;
             }
 
-            // string content = response.choices[0].message.content;
+            string content = response.choices[0].message.content;
 
-            // content = content.TrimStart('"');
-            // content = content.TrimEnd('"');
+            content = content.TrimStart('"');
+            content = content.TrimEnd('"');
 
-            // m_languages[toLanguageIndex].Texts[textIndex].Text = content;
-            // Repaint();
+            m_languages[toLanguageIndex].Texts[textIndex].Text = content;
+            Repaint();
 
-            // m_dataIDTranslationFetching.Remove(languageID);
+            m_dataIDTranslationFetching.Remove(languageID);
         }
     }
 

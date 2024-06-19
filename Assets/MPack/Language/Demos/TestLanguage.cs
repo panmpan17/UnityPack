@@ -3,10 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using MPack;
 
-public class TestLanguage : MonoBehaviour
+
+namespace MPack
 {
-    [SerializeField, LanguageID]
-    private int languageID;
-    [SerializeField, LanguageID]
-    private int[] languageIDs;
+    public class TestLanguage : MonoBehaviour
+    {
+        [SerializeField, LanguageID]
+        private int languageID;
+        [SerializeField, LanguageID]
+        private int[] languageIDs;
+
+
+        // [SerializeField]
+        // private LanguageText languageText;
+
+        // void Start()
+        // {
+        //     languageText.ChangeId(languageID);
+        // }
+    }
 }

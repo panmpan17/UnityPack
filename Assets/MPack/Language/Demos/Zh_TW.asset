@@ -22,4 +22,6 @@ MonoBehaviour:
     Text: 
   - ID: 5
     Text: "\u6E2C\u8A66\u8A9E\u8A00\u8996\u7A97"
+  - ID: 6
+    Text: 
   IgnoreTranslation: 0

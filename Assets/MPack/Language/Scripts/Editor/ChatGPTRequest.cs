@@ -20,7 +20,7 @@ namespace MPack
             if (key == null)
             {
                 key = ScriptableObject.CreateInstance<StringVariable>();
-                key.Value = "Your API Key Here!";
+                key.Value = "API_KEY";
                 AssetDatabase.CreateAsset(key, API_KEY_FILE_PATH);
                 AssetDatabase.SaveAssets();
             }
@@ -48,7 +48,7 @@ namespace MPack
                 new Message ( "user", $"Can you translate the follow text into {toLanguage}? \"{message}\"" ),
             };
 
-            var data = new
+            var data = new SendData
             {
                 model="gpt-3.5-turbo",
                 messages=messages
@@ -78,6 +78,13 @@ namespace MPack
         }
 
         [Serializable]
+        public struct SendData
+        {
+            public string model;
+            public Message[] messages;
+        }
+
+        [Serializable]
         public struct ResponseJSON
         {
             public string id;
@@ -88,6 +95,7 @@ namespace MPack
             public Usage usage;
             public ErrorMessage error;
 
+            [Serializable]
             public struct Choice
             {
                 public int index;
@@ -95,6 +103,7 @@ namespace MPack
                 public string finish_reason;
             }
 
+            [Serializable]
             public struct Usage
             {
                 public int prompt_tokens;
