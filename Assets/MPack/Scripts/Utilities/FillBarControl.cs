@@ -2,60 +2,64 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FillBarControl : MonoBehaviour
+
+namespace MPack
 {
-    [SerializeField]
-    private SpriteRenderer fillSpriteRenderer;
-    private RectTransform rectTransform;
-    private bool _initialize;
-    [SerializeField]
-    private BarType barType;
-
-    private Vector2 _originSize;
-
-    void Awake()
+    public class FillBarControl : MonoBehaviour
     {
-        if (_initialize)
-            return;
+        [SerializeField]
+        private SpriteRenderer fillSpriteRenderer;
+        private RectTransform rectTransform;
+        private bool _initialize;
+        [SerializeField]
+        private BarType barType;
 
-        _initialize = true;
-        if (fillSpriteRenderer != null)
-            _originSize = fillSpriteRenderer.size;
-        else
-        {
-            rectTransform = GetComponent<RectTransform>();
-            _originSize = rectTransform.sizeDelta;
-        }
-    }
+        private Vector2 _originSize;
 
-    /// <summary>
-    /// Set the fill of the bar
-    /// </summary>
-    /// <param name="amount">0 is 0%, 1 is 100%</param>
-    public void SetFillAmount(float amount)
-    {
-        if (!_initialize)
-            Awake();
+        void Awake()
+        {
+            if (_initialize)
+                return;
 
-        Vector2 newSize = _originSize;
-        if (barType == BarType.Horizontal)
-        {
-            newSize.x *= amount;
-        }
-        else
-        {
-            newSize.y *= amount;
+            _initialize = true;
+            if (fillSpriteRenderer != null)
+                _originSize = fillSpriteRenderer.size;
+            else
+            {
+                rectTransform = GetComponent<RectTransform>();
+                _originSize = rectTransform.sizeDelta;
+            }
         }
 
-        if (fillSpriteRenderer != null)
-            fillSpriteRenderer.size = newSize;
-        else
-            rectTransform.sizeDelta = newSize;
-    }
+        /// <summary>
+        /// Set the fill of the bar
+        /// </summary>
+        /// <param name="amount">0 is 0%, 1 is 100%</param>
+        public void SetFillAmount(float amount)
+        {
+            if (!_initialize)
+                Awake();
 
-    private enum BarType
-    {
-        Horizontal,
-        Vertical
+            Vector2 newSize = _originSize;
+            if (barType == BarType.Horizontal)
+            {
+                newSize.x *= amount;
+            }
+            else
+            {
+                newSize.y *= amount;
+            }
+
+            if (fillSpriteRenderer != null)
+                fillSpriteRenderer.size = newSize;
+            else
+                rectTransform.sizeDelta = newSize;
+        }
+
+        private enum BarType
+        {
+            Horizontal,
+            Vertical
+        }
     }
 }

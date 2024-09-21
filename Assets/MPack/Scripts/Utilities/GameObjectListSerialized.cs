@@ -5,19 +5,17 @@ using UnityEngine;
 
 namespace MPack
 {
-    [CreateAssetMenu(menuName="MPack/GameObject List")]
-    public class GameObjectList : ScriptableObject
+    [CreateAssetMenu(menuName="MPack/GameObject List Serialized")]
+    public class GameObjectListSerialized : ScriptableObject
     {
-
-        [System.NonSerialized]
-        public List<GameObject> List = new List<GameObject>();
-
-        public ValueWithEnable<int> CountLimit;
-
     #if UNITY_EDITOR
         [TextArea]
         public string Note;
     #endif
+
+        public List<GameObject> List = new List<GameObject>();
+
+        public ValueWithEnable<int> CountLimit;
 
         public bool ReachedLimit => CountLimit.Enable && AliveCount >= CountLimit.Value;
 

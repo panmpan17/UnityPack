@@ -25,15 +25,12 @@ public class CameraPointer : ScriptableObject
 
     public float FieldOfView => Target ? Target.fieldOfView : -1;
 
-    public Vector3 WorldToScreenPoint(Vector3 position)
-    {
-        return Target.WorldToScreenPoint(position);
-    }
-
-    public Vector3 WorldToViewportPoint(Vector3 position)
-    {
-        return Target.WorldToViewportPoint(position);
-    }
+    public Vector3 WorldToScreenPoint(Vector3 position) => Target.WorldToScreenPoint(position);
+    public Vector3 WorldToViewportPoint(Vector3 position) => Target.WorldToViewportPoint(position);
+    public Vector3 ScreenToWorldPoint(Vector3 position) => Target.ScreenToWorldPoint(position);
+    public Vector3 ViewportToWorldPoint(Vector3 position) => Target.ViewportToWorldPoint(position);
+    public Ray ScreenPointToRay(Vector3 position) => Target.ScreenPointToRay(position);
+    public Ray ViewportPointToRay(Vector3 position) => Target.ViewportPointToRay(position);
 
     public Ray ScreenCenterRay()
     {
