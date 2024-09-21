@@ -30,6 +30,12 @@ namespace MPack
             OnChanged?.Invoke(value);
         }
 
+        public void Toggle()
+        {
+            Value = !Value;
+            OnChanged?.Invoke(Value);
+        }
+
         public void SetValueForceBoardcastChange(bool value)
         {
             if (value == Value)

@@ -13,6 +13,8 @@ namespace  MPack
 #if UNITY_EDITOR
         [TextArea]
         public string Note;
+
+        public StringWithEnable EditorOverrideReset;
 #endif
 
         public System.Action<string> OnChanged;
@@ -21,6 +23,17 @@ namespace  MPack
         {
             Value = value;
             OnChanged?.Invoke(value);
+        }
+
+        public void ResetValue(bool notify=true)
+        {
+            Value = "";
+#if UNITY_EDITOR
+            if (EditorOverrideReset.Enable)
+                Value = EditorOverrideReset.Value;
+#endif
+            if (notify)
+                OnChanged?.Invoke(Value);
         }
     }
 }

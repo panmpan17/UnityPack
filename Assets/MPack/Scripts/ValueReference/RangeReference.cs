@@ -55,5 +55,20 @@ namespace MPack
         {
             return UseVariable ? Mathf.Lerp(Variable.Min, Variable.Max, t) : Mathf.Lerp(Min, Max, t);
         }
+
+        public float LerpUnclamped(float t)
+        {
+            return UseVariable ? Mathf.Lerp(Variable.Min, Variable.Max, t) : Mathf.LerpUnclamped(Min, Max, t);
+        }
+
+        public float InverseLerp(float number)
+        {
+            return UseVariable ? Mathf.InverseLerp(Variable.Min, Variable.Max, number) : Mathf.InverseLerp(Min, Max, number);
+        }
+
+        public override string ToString()
+        {
+            return $"RangeStruct({Min}~{Max})";
+        }
     }
 }
