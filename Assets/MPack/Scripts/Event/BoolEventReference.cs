@@ -10,6 +10,17 @@ namespace MPack
     {
         private event System.Action<bool> triggerEvent;
 
+#if UNITY_EDITOR
+        [SerializeField, InspectorButton("Set True", "SetToTrue")]
+        private bool _setTrue;
+        [SerializeField, InspectorButton("Set False", "SetToFalse")]
+        private bool _setFalse;
+
+
+        void SetToTrue() => Invoke(true);
+        void SetToFalse() => Invoke(false);
+#endif
+
         public void Invoke(bool parameter)
         {
             for (int i = eventDispatchers.Count - 1; i >= 0; i--)

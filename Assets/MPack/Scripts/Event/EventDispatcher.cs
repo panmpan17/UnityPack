@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,6 +19,9 @@ namespace MPack
         public IntUnityEvent IntEvent;
         public FloatUnityEvent FloatEvent;
         public StringUnityEvent StringEvent;
+        public Vector2UnityEvent Vector2Event;
+        public Vector3UnityEvent Vector3Event;
+        public GameObjectUnityEvent GameObjectEvent;
 
         void OnEnable()
         {
@@ -36,6 +37,9 @@ namespace MPack
         public void DispatchEventWithInt(int parameter) => IntEvent.Invoke(parameter);
         public void DispatchEventWithFloat(float parameter) => FloatEvent.Invoke(parameter);
         public void DispatchEventWithString(string parameter) => StringEvent.Invoke(parameter);
+        public void DispatchEventWithVector2(Vector2 parameter) => Vector2Event.Invoke(parameter);
+        public void DispatchEventWithVector3(Vector3 parameter) => Vector3Event.Invoke(parameter);
+        public void DispatchEventWithGameObject(GameObject parameter) => GameObjectEvent.Invoke(parameter);
 
         public enum ParameterMode {
             NotAssigned,
@@ -43,7 +47,10 @@ namespace MPack
             Bool,
             Int,
             Float,
-            String
+            String,
+            Vector2,
+            Vector3,
+            GameObject
         }
 
 #if UNITY_EDITOR
@@ -93,6 +100,15 @@ namespace MPack
                     case ParameterMode.String:
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("StringEvent"));
                         break;
+                    case ParameterMode.Vector2:
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("Vector2Event"));
+                        break;
+                    case ParameterMode.Vector3:
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("Vector3Event"));
+                        break;
+                    case ParameterMode.GameObject:
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("GameObjectEvent"));
+                        break;
                 }
 
                 serializedObject.ApplyModifiedProperties();
@@ -115,6 +131,12 @@ namespace MPack
                     return ParameterMode.Float;
                 if (abstractEventRefernece is StringEventReference)
                     return ParameterMode.String;
+                if (abstractEventRefernece is Vector2EventReference)
+                    return ParameterMode.Vector2;
+                if (abstractEventRefernece is Vector3EventReference)
+                    return ParameterMode.Vector3;
+                if (abstractEventRefernece is GameObjectEventReference)
+                    return ParameterMode.GameObject;
 
                 return ParameterMode.NotAssigned;
             }
@@ -130,4 +152,10 @@ namespace MPack
     public class FloatUnityEvent : UnityEvent<float> { }
     [System.Serializable]
     public class StringUnityEvent : UnityEvent<string> { }
+    [System.Serializable]
+    public class Vector2UnityEvent : UnityEvent<Vector2> { }
+    [System.Serializable]
+    public class Vector3UnityEvent : UnityEvent<Vector3> { }
+    [System.Serializable]
+    public class GameObjectUnityEvent : UnityEvent<GameObject> { }
 }
