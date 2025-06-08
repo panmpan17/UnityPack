@@ -19,7 +19,7 @@ namespace MPack {
         public List<T> AliveObjs, PoolObjs;
         public Transform PoolCollection;
 
-        public PrefabPool(T prefab, bool createPoolCollection=false, string poolCollectionName="Pool Collection")
+        public PrefabPool(T prefab, bool createPoolCollection = false, string poolCollectionName = "Pool Collection", Transform parent = null)
         {
             Prefab = prefab;
             InstantiateFunc = null;
@@ -30,6 +30,10 @@ namespace MPack {
             {
                 GameObject obj = new GameObject(poolCollectionName);
                 PoolCollection = obj.transform;
+            }
+            else
+            {
+                PoolCollection = parent;
             }
         }
 
@@ -45,6 +49,15 @@ namespace MPack {
                 GameObject obj = new GameObject(poolCollectionName);
                 PoolCollection = obj.transform;
             }
+        }
+
+        public void Initialize(int initialCount)
+        {
+            for (int i = 0; i < initialCount; i++)
+                Get();
+
+            while (AliveObjs.Count > 0)
+                Put(AliveObjs[0]);
         }
 
         public void ClearAliveObjects()

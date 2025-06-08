@@ -817,6 +817,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -898,6 +899,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cbb9b94baab24f01b13301cafa3b9eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &542777309
 GameObject:
   m_ObjectHideFlags: 0
@@ -2078,6 +2091,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1815713762}
   - component: {fileID: 1815713763}
+  - component: {fileID: 1815713764}
   m_Layer: 0
   m_Name: CustomScriptWithLanguageID
   m_TagString: Untagged
@@ -2114,6 +2128,62 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   languageID: 1
   languageIDs: 0100000002000000
+--- !u!114 &1815713764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815713761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0183ac53f227449aea21558fdc7bcb88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sortingLayer: 0
+  layer: 0
+  overrideInt:
+    Enable: 0
+    Value: 0
+  overrideString:
+    Enable: 0
+    Value: 
+  intReference:
+    Constant: 0
+    Variable: {fileID: 0}
+    UseVariable: 0
+  floatReference:
+    Constant: 0
+    Variable: {fileID: 0}
+    UseVariable: 0
+  boolReference:
+    Constant: 0
+    Variable: {fileID: 0}
+    UseVariable: 0
+  colorRference:
+    Constant: {r: 0, g: 0, b: 0, a: 0}
+    Variable: {fileID: 0}
+    UseVariable: 0
+  animationCurve:
+    Constant:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Variable: {fileID: 0}
+    UseVariable: 0
+  intRangeReference:
+    ConstantMin: 0
+    ConstantMax: 0
+    Variable: {fileID: 0}
+    UseVariable: 0
+  rangeReference:
+    ConstantMin: 0
+    ConstantMax: 0
+    Variable: {fileID: 0}
+    UseVariable: 0
+  eventReference: {fileID: 0}
 --- !u!1 &1987199046
 GameObject:
   m_ObjectHideFlags: 0
