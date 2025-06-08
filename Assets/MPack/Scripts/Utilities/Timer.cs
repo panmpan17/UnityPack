@@ -43,6 +43,36 @@ namespace MPack {
         }
 
         /// <summary>
+        /// Reset timer run time to run time minus target
+        /// </summary>
+        /// <param name="running">If true: set running state to true, else set to false</param>
+        public void ResetContinous(bool running = true)
+        {
+            if (ReverseMode)
+            {
+                if (RunTime <= 0)
+                    RunTime = TargetTime - RunTime;
+            }
+            else
+            {
+                RunTime = Mathf.Max(RunTime - TargetTime, 0);
+            }
+            Running = running;
+        }
+
+        /// <summary>
+        ///  Reset timer, and set a new target time
+        /// </summary>
+        /// <param name="targetTime">New target time</param>
+        /// <param name="running">If true: set running state to true, else set to false</param>
+        public void ResetWithTargetTime(float targetTime, bool running = true)
+        {
+            TargetTime = targetTime;
+            RunTime = 0;
+            Running = running;
+        }
+
+        /// <summary>
         /// Progress of the timer
         /// </summary>
         /// <value></value>
