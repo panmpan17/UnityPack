@@ -7,8 +7,6 @@ namespace MPack {
     {
         public static VirtualAudioManager ins;
 
-        protected Dictionary<AudioIDEnum, AudioPreset.EnumToAudio> clipDicts;
-
         public bool dontDestroyOnLoad;
 
         public AudioSource oneShotAudioSrc;
@@ -17,8 +15,6 @@ namespace MPack {
 
         public AudioSource bgmAudioSrc, secondaryBgmAudioSrc;
 
-        [SerializeField]
-        protected AudioPreset defaultPreset;
         [SerializeField]
         protected float soundInRange = 3;
 
@@ -32,7 +28,7 @@ namespace MPack {
         public AudioListener Listener {
             get {
                 if (listener == null)
-                    listener = FindObjectOfType<AudioListener>();
+                    listener = FindFirstObjectByType<AudioListener>();
                 
                 return listener;
             }
@@ -47,8 +43,6 @@ namespace MPack {
 
             ins = this;
 
-            clipDicts = new Dictionary<AudioIDEnum, AudioPreset.EnumToAudio>();
-
             if (oneShotAudioSourcePrefab == null)
             {
                 oneShotPlayerPool = new PrefabPool<AudioOneShotPlayer>(delegate {
@@ -62,8 +56,6 @@ namespace MPack {
             {
                 oneShotPlayerPool = new PrefabPool<AudioOneShotPlayer>(oneShotAudioSourcePrefab, true, "AudioCollects");
             }
-
-            if (defaultPreset != null) LoadAudioPreset(defaultPreset);
 
             if (oneShotAudioSrc == null)
                 oneShotAudioSrc = gameObject.AddComponent<AudioSource>();
@@ -81,91 +73,14 @@ namespace MPack {
                 DontDestroyOnLoad(gameObject);
         }
 
-    #region Audio Load/ Unload
-        public void LoadAudioPreset(AudioPreset preset, bool overrideExist=false) {
-            for (int i = 0; i < preset.Audios.Length; i++)
-                LoadAudio(preset.Audios[i], overrideExist);
-        }
-
-        public void LoadAudio(AudioPreset.EnumToAudio audioSet, bool overrideExist = false)
-        {
-            if (clipDicts.ContainsKey(audioSet.Type))
-            {
-                if (!overrideExist)
-                {
-                #if UNITY_EDITOR
-                    Debug.LogWarningFormat("Audio '{0}' already exist", audioSet.Type);
-                #endif
-                }
-                else clipDicts[audioSet.Type] = audioSet;
-            }
-            else clipDicts.Add(audioSet.Type, audioSet);
-        }
-
-        public void LoadAudio(AudioIDEnum ID, AudioClip clip, float volume=1, bool overrideExist=false) {
-            if (clipDicts.ContainsKey(ID))
-            {
-                if (!overrideExist)
-                {
-                #if UNITY_EDITOR
-                    Debug.LogWarningFormat("Audio '{0}' already exist", ID);
-                #endif
-                }
-                else clipDicts[ID] = new AudioPreset.EnumToAudio(ID, clip, volume);
-            }
-            else clipDicts.Add(ID, new AudioPreset.EnumToAudio(ID, clip, volume));
-        }
-
-        public void UnloadAudioPreset(AudioPreset preset) {
-            for (int i = 0; i < preset.Audios.Length; i++)
-            {
-                AudioIDEnum ID = preset.Audios[i].Type;
-
-                if (clipDicts.ContainsKey(ID)) clipDicts.Remove(ID);
-            }
-        }
-
-        public void UnloadAudio(AudioIDEnum ID) {
-            if (clipDicts.ContainsKey(ID)) clipDicts.Remove(ID);
-        }
-    #endregion
 
     #region Audio One Shot
-        public void PlayOneShot(AudioIDEnum ID, float volumeMultiplier = 1) {
-            if (clipDicts.ContainsKey(ID)) {
-                oneShotAudioSrc.PlayOneShot(clipDicts[ID].Clip, clipDicts[ID].Volume * volumeMultiplier);
-            }
-            else {
-            #if UNITY_EDITOR
-                Debug.LogWarningFormat("Audio '{0}' doesn't exist", ID);
-            #endif
-            }
-        }
-
         public void PlayOneShot(AudioClip clip, float volumeMultiplier = 1) {
             oneShotAudioSrc.PlayOneShot(clip, volumeMultiplier);
         }
     #endregion
 
     #region Gameobject's Audio One Shot
-        public AudioOneShotPlayer PlayOneShotAtPosition(AudioIDEnum ID, Vector3 position, float volumeMultiplier=1) {
-            if (!clipDicts.ContainsKey(ID)) {
-            #if UNITY_EDITOR
-                Debug.LogWarningFormat("Audio '{0}' doesn't exist", ID);
-            #endif
-                return null;
-            }
-
-            Vector2 delta = position - Listener.transform.position;
-            if (delta.sqrMagnitude > soundInRange * soundInRange)
-                return null;
-
-            AudioOneShotPlayer player = oneShotPlayerPool.Get();
-            player.transform.position = position;
-            player.Play(clipDicts[ID].Clip, (_player) => oneShotPlayerPool.Put(_player), clipDicts[ID].Volume * volumeMultiplier);
-            return player;
-        }
-
         public AudioOneShotPlayer PlayOneShotAtPosition(AudioClip clip, Vector3 position, float volumeMultiplier=1) {
             Vector2 delta = position - Listener.transform.position;
             if (delta.sqrMagnitude > soundInRange * soundInRange)

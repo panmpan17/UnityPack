@@ -11,8 +11,6 @@ namespace MPack
     public class OneShotLoopPlayer
     {
         [SerializeField]
-        private AudioIDEnum Type;
-        [SerializeField]
         private Timer Interval;
         // [SerializeField]
         // private bool LoopAfterSoundFinished;
@@ -39,7 +37,7 @@ namespace MPack
             Interval.Reset();
             usePosition = false;
 
-            audioMgr.PlayOneShot(Type, Volume);
+            // audioMgr.PlayOneShot(Type, Volume);
             audioMgr.PlayLoop(this);
         }
 
@@ -50,7 +48,7 @@ namespace MPack
             usePosition = true;
             Position = position;
 
-            player = audioMgr.PlayOneShotAtPosition(Type, position, Volume);
+            // player = audioMgr.PlayOneShotAtPosition(Type, position, Volume);
             if (player != null)
                 player.RegisterForceStop(this);
             audioMgr.PlayLoop(this);
@@ -76,12 +74,12 @@ namespace MPack
                 Interval.Reset();
                 if (usePosition)
                 {
-                    AudioOneShotPlayer player = audioMgr.PlayOneShotAtPosition(Type, Position, Volume);
-                    if (player != null)
-                        player.RegisterForceStop(this);
+                    // AudioOneShotPlayer player = audioMgr.PlayOneShotAtPosition(Type, Position, Volume);
+                    // if (player != null)
+                    //     player.RegisterForceStop(this);
                 }
-                else
-                    audioMgr.PlayOneShot(Type, Volume);
+                // else
+                //     audioMgr.PlayOneShot(Type, Volume);
             }
         }
     }
