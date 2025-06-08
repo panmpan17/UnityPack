@@ -10,6 +10,7 @@ public class TestAttribute : MonoBehaviour
     [Layer]
     public int layer;
     public ValueWithEnable<int> overrideInt;
+    public StringWithEnable overrideString;
 
     [Space(10)]
     public IntReference intReference;
