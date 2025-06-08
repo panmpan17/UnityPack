@@ -37,17 +37,20 @@ namespace MPack {
             enabled = true;
         }
 
-        public void Play(AudioClip clip, System.Action<AudioOneShotPlayer> playEndCall=null, float _volumeMultiplier=1) {
+        public void Play(AudioClip clip, System.Action<AudioOneShotPlayer> playEndCall=null, float volume=1, float pitch=1)
+        {
             audioSource.clip = clip;
-            audioSource.volume = volume * _volumeMultiplier;
-            volumeMultiplier = _volumeMultiplier;
+            audioSource.volume = volume * volume;
+            audioSource.pitch = pitch;
+            volumeMultiplier = volume;
             audioSource.Play();
             audioSource.loop = false;
 
             PlayEndCall = playEndCall;
         }
-
-        public void RegisterForceStop(OneShotLoopPlayer _loopPlayer) {
+        
+        public void RegisterForceStop(OneShotLoopPlayer _loopPlayer)
+        {
             loopPlayer = _loopPlayer;
             loopPlayer.ForceStopDelegate += Stop;
         }
